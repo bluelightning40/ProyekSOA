@@ -97,6 +97,7 @@ app.post('/api/addTeam',(req,res)=>{
     }
 });
 
+//untuk mendapatkan data semua team
 app.get("/api/getTeams",function(req,res){
     pool.getConnection((err,conn)=>{
         conn.query(`select * from teams`, (err,result)=>{
@@ -108,10 +109,24 @@ app.get("/api/getTeams",function(req,res){
     });
 });
 
+//untuk mencari team dengan id_team yang spesifik
 app.get("/api/getTeamById/:team_id",function(req,res){
     var team_id = req.params.team_id;
     pool.getConnection((err,conn)=>{
         conn.query(`select * from teams where team_id='${team_id}'`, (err,result)=>{
+            if(err) res.status(500).send(err);
+            else{
+                res.status(404).send(result);
+            }
+        });
+    });
+});
+
+//untuk mencari team dengan nama team yang mengandung huruf tertentu (inputan)
+app.get("/api/getTeamsContaint/:chars",function(req,res){
+    var chars = req.params.chars;
+    pool.getConnection((err,conn)=>{
+        conn.query(`select * from teams where team_id LIKE '%${chars}%'`, (err,result)=>{
             if(err) res.status(500).send(err);
             else{
                 res.status(404).send(result);
