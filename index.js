@@ -52,6 +52,83 @@ app.post('/api/createLeague',(req,res)=>{
     }
 });
 
+app.get('/api/getLeagues',(req,res)=>{
+    pool.getConnection((error,conn)=>{
+        conn.query(`select * from leagues`,(error,result)=>{
+            if(error) res.status(500).send(error);
+            else{
+                res.status(200).send(result);
+            }
+        });
+    });
+});
+
+app.get('/api/getLeaguesByCountry',(req,res)=>{
+    var name = req.query.name;
+    if(name==undefined){
+        res.status(400).send("Harus ada parameter name");
+    }
+    pool.getConnection((error,conn)=>{
+        conn.query(`select * from leagues where country_name='${name}'`,(error,result)=>{
+            if(error) res.status(500).send(error);
+            else{
+                if(result.length==0){
+                    res.status(404).send("Status : 404 Bad Request");
+                }else{
+                    res.status(200).send(result);
+                }
+            }
+        });
+    })
+});
+
+app.put('/api/updateLeague',(req,res)=>{
+    var key = req.body.key;
+    var name = req.body.name;
+    var country = req.body.country;
+    if(key==undefined){
+        res.status(400).send("Harus ada league_key");
+    }else if(name==undefined && country==undefined){
+        res.status(400).send("Harus ada yang diupdate")
+    }
+    pool.getConnection((error,conn)=>{
+        conn.query(`update leagues set league_name='${name}', country_name='${country}' where league_key='${key}'`,(error,result)=>{
+            if(error) res.status(500).send(error);
+            else{
+                if(result.length==0){
+                    res.status(404).send("Status : 404 Bad Request");
+                }
+                else{
+                    res.status(201).json({
+                        key : key,
+                        league_name : name,
+                        country_name : country
+                    })
+                }
+            }
+        });
+    });
+});
+
+app.delete('/api/deleteLeague',(req,res)=>{
+    var key = req.body.key;
+    if(key==undefined){
+        res.status(400).send("Harus ada league_key");
+    }else{
+        pool.getConnection((error,conn)=>{
+            conn.query(`delete from leagues where league_key='${key}'`,(error,result)=>{
+                if(error) res.status(500).send(error);
+                else{
+                    if(result.length==0){
+                        res.status(404).send("Status : 404 Bad Request");
+                    }else{
+                        res.status(200).send("Berhasil Delete Leagues");
+                    }
+                }
+            });
+        });
+    }
+});
 
 async function getLeagues(){
     return new Promise(function(resolve,reject){
