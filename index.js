@@ -44,7 +44,7 @@ app.post('/api/createLeague',(req,res)=>{
                                     });
                                 }
                             });
-                        
+
                     }
                 }
             });
@@ -89,7 +89,7 @@ app.post('/api/addTeam',(req,res)=>{
                             else{
                                 res.status(201).send('Add Team ' + team_name + ' berhasil');
                             }
-                        });                        
+                        });
                     }
                 }
             });
@@ -120,7 +120,30 @@ app.get("/api/getTeamById/:team_id",function(req,res){
     });
 });
 
+app.get("/api/RecuitPlayer",function(req,res){
+  team_id = req.body.team_id;
+  id_player = req.body.id_player;
+  pool.getConnection((err,conn)=>{
+    conn.query(`update set id_team=${team_id} where id_player='${id_player}'`,(err,result)=>{
+      if(err) res.status(500).send(err);
+      else{
+        res.status(201).send('Rekrut Player ' + id_player + ' berhasil')
+      }
+    })
+  })
+})
 
+app.get("/api/PecatPemain",function(req,res){
+  id_player = req.body.id_player;
+  pool.getConnection((err,conn)=>{
+    conn.query(`update set id_team=0 where id_player='${id_player}'`,(err,result)=>{
+      if(err) res.status(500).send(err);
+      else{
+        res.status(201).send("Pecat Player " + id_player + " berhasil")
+      }
+    })
+  })
+})
 //=======================================================================================================================
 
 
