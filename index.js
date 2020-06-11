@@ -198,6 +198,13 @@ app.post("/api/loginUser", function(req,res){
     })
   }
 })
+
+app.post("/api/UpgradeUser/:api_key", function(req,res){
+  api_key = req.params.api_key;
+  id_user = req.body.id_user;
+  upgrade_to = req.body.upgrade;
+
+})
 //=======================================================================================================================
 
 
