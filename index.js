@@ -11,6 +11,12 @@ const pool = mysql.createPool({
     password:""
 })
 
+//User Sstatus Code
+
+// 0 => Free user => API hit 10/day
+// 1 => Lite User => API hit 50/day
+// 2 +> Premium User => API hit unlimited
+
 app.post('/api/createLeague',(req,res)=>{
     var league_name = req.body.league_name;
     var country_name = req.body.country_name;
@@ -120,7 +126,7 @@ app.get("/api/getTeamById/:team_id",function(req,res){
     });
 });
 
-app.get("/api/RecuitPlayer",function(req,res){
+app.post("/api/RecuitPlayer",function(req,res){
   team_id = req.body.team_id;
   id_player = req.body.id_player;
   pool.getConnection((err,conn)=>{
@@ -133,7 +139,7 @@ app.get("/api/RecuitPlayer",function(req,res){
   })
 })
 
-app.get("/api/PecatPemain",function(req,res){
+app.post("/api/PecatPemain",function(req,res){
   id_player = req.body.id_player;
   pool.getConnection((err,conn)=>{
     conn.query(`update set id_team=0 where id_player='${id_player}'`,(err,result)=>{
@@ -143,6 +149,54 @@ app.get("/api/PecatPemain",function(req,res){
       }
     })
   })
+})
+
+app.post("/api/RegisterUser", function(req,res){
+  id_user = req.body.id_user;
+  password = req.body.pass;
+  api_hit = 0;
+  status = 0;
+  api_key = randomstring.generate(25);
+  if(id_user != undefined && password != undefined){
+    pool.getConnection((err,conn)=>{
+      conn.query(`select * from user where id_user = '${id_user}'`, (err,result)=>{
+        if(err) res.status(500).send(err)
+        else{
+          if(result.length==0){
+            conn.query(`insert into user values('${id_user}','${password}',${api_hit},'${api_key}',${status})`, (err,result)=>{
+              if(err) res.status(500).send(err);
+              else{
+                res.status(201).send("API key = " + api_key)
+              }
+            })
+          }
+          else{
+            res.status(400).send("User telah terdaftar!!")
+          }
+        }
+      })
+    })
+  }
+})
+
+app.post("/api/loginUser", function(req,res){
+  id_user = req.body.id_user;
+  password = req.body.pass;
+  if(id_user != undefined && password != undefined){
+    pool.getConnection((err,conn)=>{
+      conn.query(`select api_key from user where id_user = '${id_user}' and password = '${password}'`, (err,result)=>{
+        if(err) res.status(500).send(err)
+        else{
+          if(result.length>0){
+            res.status(201).send("API key = " + result[0]);
+          }
+          else{
+            res.status(400).send("User belum terdaftar!!")
+          }
+        }
+      })
+    })
+  }
 })
 //=======================================================================================================================
 

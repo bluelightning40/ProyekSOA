@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.1
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2020 at 06:59 AM
--- Server version: 10.4.8-MariaDB
--- PHP Version: 7.3.11
+-- Generation Time: Jun 11, 2020 at 11:16 PM
+-- Server version: 10.1.35-MariaDB
+-- PHP Version: 7.2.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -65,6 +65,22 @@ CREATE TABLE `matches` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `player`
+--
+
+DROP TABLE IF EXISTS `player`;
+CREATE TABLE `player` (
+  `id_player` varchar(5) NOT NULL,
+  `id_team` int(11) NOT NULL,
+  `nationality` varchar(255) NOT NULL,
+  `age` int(11) NOT NULL,
+  `position` varchar(255) NOT NULL,
+  `player_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `teams`
 --
 
@@ -82,6 +98,21 @@ CREATE TABLE `teams` (
 
 INSERT INTO `teams` (`team_id`, `team_name`, `team_league_id`, `team_logo`) VALUES
 (321, 'team321', '55', 'team321.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id_user` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `api_hit` int(11) NOT NULL,
+  `api_key` varchar(25) NOT NULL,
+  `status` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
