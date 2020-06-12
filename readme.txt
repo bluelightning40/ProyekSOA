@@ -1,4 +1,4 @@
-Endpoint : 
+Endpoint :
 1. createLeague (DONE + 3rd api)
 2. addTeam (DONE)
 3. getTeams (DONE)
@@ -16,9 +16,8 @@ Endpoint :
 POST = 7
 GET = 4
 
-Authentication & Authorization 
+Authentication & Authorization
 
-Payment Model
+Payment Model (DONE) using STRIPE
 
 upload pake Multer
-
