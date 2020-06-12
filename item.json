@@ -1,0 +1,14 @@
+{
+  "subscription":[
+    {
+      "id" : 1,
+      "name" : "Upgrade to Lite User",
+      "price" : 500
+    },
+    {
+      "id" : 2,
+      "name" : "Upgrade to Premium User",
+      "price" : 1000
+    }
+  ]
+}

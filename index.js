@@ -1,13 +1,30 @@
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').config()
+}
+
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
+const API_KEY_SPORT = process.env.API_KEY_SPORT
+const port = process.env.PORT;
+
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
 var request = require('request');
 const randomstring = require('randomstring');
+const bodyParser = require('body-parser');
+const exphbs = require('express-handlebars');
+const fs = require('fs');
+const stripe = require('stripe')(stripeSecretKey)
+const midtransClient = require('midtrans-client')
 app.use(express.urlencoded({extended:true}));
+app.set('view engine', 'ejs')
 
-if(process.env.NODE_ENV !== 'production'){
-  require('dotenv').config()
-}
+let coreApi = new midtransClient.CoreApi({
+        isProduction : false,
+        serverKey : midtransSecretKey,
+        clientKey : midtransPublicKey
+    });
 
 const pool = mysql.createPool({
     host:"localhost",
@@ -16,15 +33,11 @@ const pool = mysql.createPool({
     password:""
 })
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
-const API_KEY_SPORT = process.env.API_KEY_SPORT
-
 //User Sstatus Code
 
 // 0 => Free user => API hit 10/day
 // 1 => Lite User => API hit 50/day
-// 2 => Premium User => API hit unlimited
+// 2 => Premium User => API hit 100/day
 
 //Tipe Card Pemain
 
@@ -88,7 +101,6 @@ app.post('/api/createLeague',(req,res)=>{
     }
 });
 
-
 app.get('/api/getLeagues',(req,res)=>{
     pool.getConnection((error,conn)=>{
         conn.query(`select * from leagues`,(error,result)=>{
@@ -135,7 +147,6 @@ app.get('/api/getLeaguesByCountry',(req,res)=>{
         });
     })
 });
-
 
 app.put('/api/updateLeague',(req,res)=>{
     var key = req.body.key;
@@ -317,6 +328,7 @@ app.post("/api/PecatPemain",function(req,res){
 app.post("/api/RegisterUser", function(req,res){
   id_user = req.body.id_user;
   password = req.body.pass;
+  email = req.body.email;
   api_hit = 0;
   status = 0;
   api_key = randomstring.generate(25);
@@ -326,7 +338,7 @@ app.post("/api/RegisterUser", function(req,res){
         if(err) res.status(500).send(err)
         else{
           if(result.length==0){
-            conn.query(`insert into user values('${id_user}','${password}',${api_hit},'${api_key}',${status})`, (err,result)=>{
+            conn.query(`insert into user values('${id_user}','${email}','${password}',${api_hit},'${api_key}',${status})`, (err,result)=>{
               if(err) res.status(500).send(err);
               else{
                 res.status(201).send("API key = " + api_key)
@@ -362,17 +374,83 @@ app.post("/api/loginUser", function(req,res){
   }
 })
 
-app.post("/api/UpgradeUser/:api_key", function(req,res){
-  api_key = req.params.api_key;
-  id_user = req.body.id_user;
-  upgrade_to = req.body.upgrade;
+app.engine('handlebars',exphbs({defaultLayout:'main'}));
+app.set('view engine','handlebars');
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
 
+app.use(express.static(`${__dirname}/public`));
+
+app.get("/",function(req,res){
+  res.render('index');
 })
+
+app.post("/api/UpgradeUser/:upgrade_to", function(req,res){
+  //var id_user = req.body.id_user;
+  var upgrade_to = req.params.upgrade_to;
+  var email = req.body.stripeEmail;
+
+  var amount = 0;
+  if(upgrade_to==1){
+    amount = 500;
+  }
+  else if(upgrade_to==2){
+    amount = 1000;
+  }
+
+  console.log(req.body);
+
+  pool.getConnection((err,conn)=>{
+    conn.query(`select * from user where email_user = '${email}'`, (err,result)=>{
+      if(err) res.status(500).send(err);
+      else{
+        if(result.length>0){
+          if(result[0].status<upgrade_to){
+            stripe.customers.create({
+              email: req.body.stripeEmail,
+              source: req.body.stripeToken
+            })
+            .then(customer=> stripe.charges.create({
+              amount: amount,
+              description: 'Upgrade Subscription',
+              currency: 'usd',
+              customer: customer.id
+            }))
+            .then(charge=> {
+              if(upgrade_to==1){
+                conn.query(`update set status = ${upgrade_to} where email_user = '${email}'`, (err,result)=>{
+                  if(err) res.status(500).send(err);
+                  else{
+                    res.status(201).send("Upgrade Success !!");
+                  }
+                });
+              }
+              else{
+                conn.query(`update set status = ${upgrade_to} where email_user = '${email}'`, (err,result)=>{
+                  if(err) res.status(500).send(err);
+                  else{
+                    res.status(201).send("Upgrade Success !!");
+                  }
+                });
+              }
+            });
+          }
+          else{
+            res.status(400).send("Hanya bisa upgrade ke kelas yang lebih tinggi!!");
+          }
+        }
+        else{
+          res.send(400).send("Email Tidak Terdaftar!!");
+        }
+      }
+    });
+  });
+});
 
 //=======================================================================================================================
 
 
-app.listen(3000, function(){
-    console.log("LISTENING TO PORT 3000!");
+app.listen(port, function(){
+    console.log(`LISTENING TO PORT ${port}!`);
 })

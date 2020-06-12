@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>PAYMENT ENDPOINT</title>
+  </head>
+  <body>
+    <h1> Upgrade to Lite </h1>
+    <form action="/api/UpgradeUser/1" method="POST">
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="pk_test_51GsqtQLo4Mup3YuntxWAxrhVLzpVchwmuoyp0oLYP3eFiyhRbZh0t5bleh2MqKIjAUkVaur3dRjDjkg3hDd41s8P00tpNWOGUH"
+          data-amount="500"
+          data-name="Upgrade to Lite"
+          data-description="Upgrade Subscription"
+          data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+          data-locale="auto">
+        </script>
+      </form>
+      <br>
+      <h1> Upgrade to Premium </h1>
+      <form action="/api/UpgradeUser/2" method="POST">
+          <script
+            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="pk_test_51GsqtQLo4Mup3YuntxWAxrhVLzpVchwmuoyp0oLYP3eFiyhRbZh0t5bleh2MqKIjAUkVaur3dRjDjkg3hDd41s8P00tpNWOGUH"
+            data-amount="1000"
+            data-name="Upgrade to Premium"
+            data-description="Upgrade Subscription"
+            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+            data-locale="auto">
+          </script>
+        </form>
+        <br>
+  </body>
+</html>
