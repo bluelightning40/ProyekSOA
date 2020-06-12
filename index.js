@@ -30,9 +30,9 @@ const pool = mysql.createPool({
 
 //User Sstatus Code
 
-// 0 => Free user => API hit 10/day
+// 0 => Free user => API hit 25/day
 // 1 => Lite User => API hit 50/day
-// 2 => Premium User => API hit 100/day
+// 2 => Premium User => API hit 75/day
 
 //Tipe Card Pemain
 
@@ -324,7 +324,7 @@ app.post("/api/RegisterUser", function(req,res){
   id_user = req.body.id_user;
   password = req.body.pass;
   email = req.body.email;
-  api_hit = 0;
+  api_hit = 10;
   status = 0;
   var dt = dateTime.create();
   var formatted = dt.format('Y-m-d');
@@ -416,7 +416,7 @@ app.post("/api/UpgradeUser/:upgrade_to", function(req,res){
             }))
             .then(charge=> {
               if(upgrade_to==1){
-                conn.query(`update user set status = ${upgrade_to} where email_user = '${email}'`, (err,result)=>{
+                conn.query(`update user set status = ${upgrade_to}, api_hit = 50 where email_user = '${email}'`, (err,result)=>{
                   if(err) res.status(500).send(err);
                   else{
                     res.status(201).send("Upgrade Success !!");
@@ -424,7 +424,7 @@ app.post("/api/UpgradeUser/:upgrade_to", function(req,res){
                 });
               }
               else{
-                conn.query(`update user set status = ${upgrade_to} where email_user = '${email}'`, (err,result)=>{
+                conn.query(`update user set status = ${upgrade_to}, api_hit = 75 where email_user = '${email}'`, (err,result)=>{
                   if(err) res.status(500).send(err);
                   else{
                     res.status(201).send("Upgrade Success !!");
@@ -453,7 +453,7 @@ setInterval(function(){
       if(err) console.log(err);
       else{
         if(res.length==0){
-          conn.query(`update user set last_update='${formatted}', api_hit = 0 where 1`,(err,res)=>{
+          conn.query(`update user set last_update='${formatted}', api_hit = (status+1)*25 where 1`,(err,res)=>{
             if(err) console.log(err);
             else{
               console.log("user api hit updated");
