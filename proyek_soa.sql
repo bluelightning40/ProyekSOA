@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2020 at 02:16 PM
+-- Generation Time: Jun 12, 2020 at 02:50 PM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -136,8 +136,16 @@ CREATE TABLE `user` (
   `password` varchar(255) NOT NULL,
   `api_hit` int(11) NOT NULL,
   `api_key` varchar(25) NOT NULL,
-  `status` int(1) NOT NULL
+  `status` int(1) NOT NULL,
+  `last_update` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id_user`, `email_user`, `password`, `api_hit`, `api_key`, `status`, `last_update`) VALUES
+('abc', 'a@b.c', 'abc', 0, 'BW2h61YbIBlJFlx9e7NsKErU6', 0, '2020-06-12');
 
 --
 -- Indexes for dumped tables

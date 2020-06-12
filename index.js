@@ -8,6 +8,7 @@ const API_KEY_SPORT = process.env.API_KEY_SPORT
 const port = process.env.PORT;
 
 const express = require('express');
+var dateTime = require('node-datetime');
 const app = express();
 const mysql = require('mysql');
 var request = require('request');
@@ -19,12 +20,6 @@ const stripe = require('stripe')(stripeSecretKey)
 const midtransClient = require('midtrans-client')
 app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'ejs')
-
-let coreApi = new midtransClient.CoreApi({
-        isProduction : false,
-        serverKey : midtransSecretKey,
-        clientKey : midtransPublicKey
-    });
 
 const pool = mysql.createPool({
     host:"localhost",
@@ -304,7 +299,7 @@ app.post("/api/RecuitPlayer",function(req,res){
   team_id = req.body.team_id;
   id_player = req.body.id_player;
   pool.getConnection((err,conn)=>{
-    conn.query(`update set id_team=${team_id} where id_player='${id_player}'`,(err,result)=>{
+    conn.query(`update user set id_team=${team_id} where id_player='${id_player}'`,(err,result)=>{
       if(err) res.status(500).send(err);
       else{
         res.status(201).send('Rekrut Player ' + id_player + ' berhasil')
@@ -316,7 +311,7 @@ app.post("/api/RecuitPlayer",function(req,res){
 app.post("/api/PecatPemain",function(req,res){
   id_player = req.body.id_player;
   pool.getConnection((err,conn)=>{
-    conn.query(`update set id_team=0 where id_player='${id_player}'`,(err,result)=>{
+    conn.query(`update user set id_team=0 where id_player='${id_player}'`,(err,result)=>{
       if(err) res.status(500).send(err);
       else{
         res.status(201).send("Pecat Player " + id_player + " berhasil")
@@ -331,6 +326,8 @@ app.post("/api/RegisterUser", function(req,res){
   email = req.body.email;
   api_hit = 0;
   status = 0;
+  var dt = dateTime.create();
+  var formatted = dt.format('Y-m-d');
   api_key = randomstring.generate(25);
   if(id_user != undefined && password != undefined){
     pool.getConnection((err,conn)=>{
@@ -338,7 +335,7 @@ app.post("/api/RegisterUser", function(req,res){
         if(err) res.status(500).send(err)
         else{
           if(result.length==0){
-            conn.query(`insert into user values('${id_user}','${email}','${password}',${api_hit},'${api_key}',${status})`, (err,result)=>{
+            conn.query(`insert into user values('${id_user}','${email}','${password}',${api_hit},'${api_key}',${status},'${formatted}')`, (err,result)=>{
               if(err) res.status(500).send(err);
               else{
                 res.status(201).send("API key = " + api_key)
@@ -419,7 +416,7 @@ app.post("/api/UpgradeUser/:upgrade_to", function(req,res){
             }))
             .then(charge=> {
               if(upgrade_to==1){
-                conn.query(`update set status = ${upgrade_to} where email_user = '${email}'`, (err,result)=>{
+                conn.query(`update user set status = ${upgrade_to} where email_user = '${email}'`, (err,result)=>{
                   if(err) res.status(500).send(err);
                   else{
                     res.status(201).send("Upgrade Success !!");
@@ -427,7 +424,7 @@ app.post("/api/UpgradeUser/:upgrade_to", function(req,res){
                 });
               }
               else{
-                conn.query(`update set status = ${upgrade_to} where email_user = '${email}'`, (err,result)=>{
+                conn.query(`update user set status = ${upgrade_to} where email_user = '${email}'`, (err,result)=>{
                   if(err) res.status(500).send(err);
                   else{
                     res.status(201).send("Upgrade Success !!");
@@ -447,6 +444,26 @@ app.post("/api/UpgradeUser/:upgrade_to", function(req,res){
     });
   });
 });
+
+setInterval(function(){
+  var dt = dateTime.create();
+  var formatted = dt.format('Y-m-d');
+  pool.getConnection((err,conn)=>{
+    conn.query(`select * from user where last_update='${formatted}'`,(err,res)=>{
+      if(err) console.log(err);
+      else{
+        if(res.length==0){
+          conn.query(`update user set last_update='${formatted}', api_hit = 0 where 1`,(err,res)=>{
+            if(err) console.log(err);
+            else{
+              console.log("user api hit updated");
+            }
+          })
+        }
+      }
+    })
+  });
+},5000);
 
 //=======================================================================================================================
 
