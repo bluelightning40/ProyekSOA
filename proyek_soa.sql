@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 11, 2020 at 11:16 PM
+-- Generation Time: Jun 12, 2020 at 10:38 AM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -27,12 +27,41 @@ USE `proyek_soa`;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `card_detail`
+--
+
+DROP TABLE IF EXISTS `card_detail`;
+CREATE TABLE `card_detail` (
+  `id_match` int(5) NOT NULL,
+  `id_team` int(5) NOT NULL,
+  `id_player` int(5) NOT NULL,
+  `card_type` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `goal_detail`
+--
+
+DROP TABLE IF EXISTS `goal_detail`;
+CREATE TABLE `goal_detail` (
+  `id_match` int(5) NOT NULL,
+  `id_team` int(5) NOT NULL,
+  `id_player_scored` int(5) NOT NULL,
+  `id_player_assist` int(5) NOT NULL,
+  `minute_scored` int(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `leagues`
 --
 
 DROP TABLE IF EXISTS `leagues`;
 CREATE TABLE `leagues` (
-  `league_key` varchar(20) NOT NULL,
+  `id_league` varchar(5) NOT NULL,
   `league_name` varchar(255) NOT NULL,
   `country_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -41,7 +70,7 @@ CREATE TABLE `leagues` (
 -- Dumping data for table `leagues`
 --
 
-INSERT INTO `leagues` (`league_key`, `league_name`, `country_name`) VALUES
+INSERT INTO `leagues` (`id_league`, `league_name`, `country_name`) VALUES
 ('1', 'Surabaya cup', 'Indonesia'),
 ('2', 'Surabaya cups', 'Indonesia'),
 ('3', 'Surabaya cupsa', 'Indonesia');
@@ -54,12 +83,14 @@ INSERT INTO `leagues` (`league_key`, `league_name`, `country_name`) VALUES
 
 DROP TABLE IF EXISTS `matches`;
 CREATE TABLE `matches` (
-  `league_key` varchar(20) NOT NULL,
-  `country_key` varchar(20) NOT NULL,
-  `away_team` int(11) NOT NULL,
-  `home_team` int(11) NOT NULL,
-  `score` varchar(20) NOT NULL,
-  `status` int(11) NOT NULL
+  `id_match` int(5) NOT NULL,
+  `league_key` int(5) NOT NULL,
+  `away_team` varchar(5) NOT NULL,
+  `home_team` int(5) NOT NULL,
+  `home_score` int(2) NOT NULL,
+  `away_score` int(2) NOT NULL,
+  `date` date NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -70,8 +101,8 @@ CREATE TABLE `matches` (
 
 DROP TABLE IF EXISTS `player`;
 CREATE TABLE `player` (
-  `id_player` varchar(5) NOT NULL,
-  `id_team` int(11) NOT NULL,
+  `id_player` int(5) NOT NULL,
+  `id_team` int(5) NOT NULL,
   `nationality` varchar(255) NOT NULL,
   `age` int(11) NOT NULL,
   `position` varchar(255) NOT NULL,
@@ -86,18 +117,11 @@ CREATE TABLE `player` (
 
 DROP TABLE IF EXISTS `teams`;
 CREATE TABLE `teams` (
-  `team_id` int(11) NOT NULL,
+  `id_team` int(5) NOT NULL,
   `team_name` varchar(255) NOT NULL,
-  `team_league_id` varchar(255) NOT NULL,
+  `team_league_id` varchar(5) NOT NULL,
   `team_logo` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `teams`
---
-
-INSERT INTO `teams` (`team_id`, `team_name`, `team_league_id`, `team_logo`) VALUES
-(321, 'team321', '55', 'team321.jpg');
 
 -- --------------------------------------------------------
 
@@ -113,6 +137,50 @@ CREATE TABLE `user` (
   `api_key` varchar(25) NOT NULL,
   `status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `matches`
+--
+ALTER TABLE `matches`
+  ADD PRIMARY KEY (`id_match`);
+
+--
+-- Indexes for table `player`
+--
+ALTER TABLE `player`
+  ADD PRIMARY KEY (`id_player`);
+
+--
+-- Indexes for table `teams`
+--
+ALTER TABLE `teams`
+  ADD PRIMARY KEY (`id_team`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `matches`
+--
+ALTER TABLE `matches`
+  MODIFY `id_match` int(5) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `player`
+--
+ALTER TABLE `player`
+  MODIFY `id_player` int(5) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `teams`
+--
+ALTER TABLE `teams`
+  MODIFY `id_team` int(5) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
