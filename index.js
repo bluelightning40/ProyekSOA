@@ -5,6 +5,10 @@ var request = require('request');
 const randomstring = require('randomstring');
 app.use(express.urlencoded({extended:true}));
 
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').config()
+}
+
 const pool = mysql.createPool({
     host:"localhost",
     database:"proyek_soa",
@@ -12,11 +16,20 @@ const pool = mysql.createPool({
     password:""
 })
 
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
+const API_KEY_SPORT = process.env.API_KEY_SPORT
+
 //User Sstatus Code
 
 // 0 => Free user => API hit 10/day
 // 1 => Lite User => API hit 50/day
 // 2 => Premium User => API hit unlimited
+
+//Tipe Card Pemain
+
+// 0 => Yellow Card
+// 1 => Red Card
 
 app.post('/api/createLeague',(req,res)=>{
     var league_name = req.body.league_name;
@@ -65,7 +78,7 @@ app.post('/api/createLeague',(req,res)=>{
                                             });
                                         }
                                     });
-                    
+
                             }
                         }
                     });
@@ -160,7 +173,7 @@ app.put('/api/updateLeague',(req,res)=>{
                                         })
                                     }
                                 })
-                                
+
                             }
                         }
                     });
@@ -169,8 +182,6 @@ app.put('/api/updateLeague',(req,res)=>{
         })
     });
 });
-
-
 
 app.delete('/api/deleteLeague',(req,res)=>{
     var key = req.body.key;
@@ -209,13 +220,11 @@ app.delete('/api/deleteLeague',(req,res)=>{
     }
 });
 
-
-
 async function getLeagues(){
     return new Promise(function(resolve,reject){
         var options = {
             'method': 'GET',
-            'url': `https://allsportsapi.com/api/football/?met=Leagues&APIkey=f4289b1b8aef1ff94659ddbc6d79451d1953a065486cc24956415dd551f8ad04`,
+            'url': `https://allsportsapi.com/api/football/?met=Leagues&APIkey=${API_KEY_SPOR}`,
             'headers':{
             }
         };
@@ -277,6 +286,8 @@ app.get("/api/getTeamById/:team_id",function(req,res){
         });
     });
 });
+
+//=======================================================================================================================
 
 app.post("/api/RecuitPlayer",function(req,res){
   team_id = req.body.team_id;
@@ -356,7 +367,9 @@ app.post("/api/UpgradeUser/:api_key", function(req,res){
   id_user = req.body.id_user;
   upgrade_to = req.body.upgrade;
 
+
 })
+
 //=======================================================================================================================
 
 
