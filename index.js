@@ -298,23 +298,60 @@ app.get("/api/getTeamById/:team_id",function(req,res){
 app.post("/api/RecuitPlayer",function(req,res){
   team_id = req.body.team_id;
   id_player = req.body.id_player;
+  api_key = req.body.api_key;
   pool.getConnection((err,conn)=>{
-    conn.query(`update user set id_team=${team_id} where id_player='${id_player}'`,(err,result)=>{
+    conn.query(`select * from user where api_key='${api_key}' and api_hit>0`,(err,result)=>{
       if(err) res.status(500).send(err);
       else{
-        res.status(201).send('Rekrut Player ' + id_player + ' berhasil')
+        if(result.length>0){
+          api_hit = result[0].api_hit;
+          conn.query(`update player set id_team=${team_id} where id_player='${id_player}'`,(err,result)=>{
+            if(err) res.status(500).send(err);
+            else{
+              api_hit = api_hit-1;
+              conn.query(`update user set api_hit = ${api_hit} where api_key=${api_key}`,(err,result)=>{
+                if(err) res.status(500).send(err);
+                else{
+                  res.status(201).send('Rekrut Player ' + id_player + ' berhasil')
+                }
+              })
+            }
+          })
+        }
+        else[
+          res.status(400).send("API key tidak Valid atau User telah mencapai batas Request !!")
+        ]
       }
     })
+
   })
 })
 
 app.post("/api/PecatPemain",function(req,res){
   id_player = req.body.id_player;
+  api_key = req.body.api_key;
   pool.getConnection((err,conn)=>{
-    conn.query(`update user set id_team=0 where id_player='${id_player}'`,(err,result)=>{
+    conn.query(`select * from user where api_key='${api_key}' and api_hit>0`,(err,result)=>{
       if(err) res.status(500).send(err);
       else{
-        res.status(201).send("Pecat Player " + id_player + " berhasil")
+        if(result.length>0){
+          api_hit = result[0].api_hit;
+          conn.query(`update player set id_team=0 where id_player='${id_player}'`,(err,result)=>{
+            if(err) res.status(500).send(err);
+            else{
+              api_hit = api_hit-1;
+              conn.query(`update user set api_hit = ${api_hit} where api_key=${api_key}`,(err,result)=>{
+                if(err) res.status(500).send(err);
+                else{
+                  res.status(201).send('Pecat Player ' + id_player + ' berhasil')
+                }
+              })
+            }
+          })
+        }
+        else{
+          res.status(400).send("API key tidak Valid atau User telah mencapai batas Request !!")
+        }
       }
     })
   })
