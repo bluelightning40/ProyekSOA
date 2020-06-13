@@ -49,12 +49,14 @@ app.post('/api/createLeague',(req,res)=>{
         pool.getConnection((err,conn)=>{
             conn.query(`select * from user where api_key='${api_key}' and api_hit>0 and status=2`,(err,result)=>{
                 var api_hit = result[0].api_hit;
+                console.log("a")
                 if(err) res.status(500).send(err);
                 else{
                     if(result.length==0){
                         return res.status(400).send("Upgrade Layanan User Anda Menjadi Premium");
                     }
                     conn.query(`select * from leagues where league_name='${league_name}'`, async (err,result)=>{
+                      console.log("b");
                         if(err) res.status(500).send(err);
                         else{
                             const leagues = await getLeagues();
@@ -68,24 +70,19 @@ app.post('/api/createLeague',(req,res)=>{
                             if(result.length > 0){
                                 return res.status(404).send('Status : 400 Bad Request');
                             }else{
-                                    conn.query(`select * from leagues`,(err,result)=>{
-                                        if(err) res.status(500).send(err);
-                                        else{
-                                            var jumlah = result.length + 1;
-                                            conn.query(`insert into leagues values('${jumlah}','${league_name}','${country_name}')`,(errors,row)=>{
-                                                if(errors) res.status(500).send(errors);
-                                                else{
-                                                    api_hit = api_hit - 1;
-                                                    conn.query(`update user set api_hit=${api_hit} where api_key='${api_key}'`,(errs,rows)=>{
-                                                        if(errs) res.status(500).send(errs);
-                                                        else{
-                                                            return res.status(201).send('Berhasil menambah league');
-                                                        }
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    });
+                                conn.query(`insert into leagues values('','${league_name}','${country_name}')`,(errors,row)=>{
+                                    if(errors) res.status(500).send(errors);
+                                    else{
+                                        api_hit = api_hit - 1;
+                                        conn.query(`update user set api_hit=${api_hit} where api_key='${api_key}'`,(errs,rows)=>{
+                                            if(errs) res.status(500).send(errs);
+                                            else{
+                                                return res.status(201).send('Berhasil menambah league');
+                                            }
+                                        });
+                                    }
+                                });
+                                        
 
                             }
                         }
@@ -97,13 +94,36 @@ app.post('/api/createLeague',(req,res)=>{
 });
 
 app.get('/api/getLeagues',(req,res)=>{
+  var api_key = req.body.api_key;
     pool.getConnection((error,conn)=>{
-        conn.query(`select * from leagues`,(error,result)=>{
+      conn.query(`select * from user where api_key='${api_key}' and api_hit>0 and status=2`,(errors,row)=>{
+        var api_hit = row[0].api_hit;
+        if(errors) res.status(500).errors
+        else{
+          if(row.length==0){
+            return res.status(400).send("Upgrade Layanan User Anda Menjadi Premium");
+          }
+          conn.query(`select * from leagues`, async (error,result)=>{
             if(error) res.status(500).send(error);
             else{
-                res.status(200).send(result);
+              const leagues = await getLeagues();
+              const hasil = JSON.parse(leagues);
+              console.log(hasil.result.length);
+              var arrTemp = [];
+              arrTemp.push(result);
+              for(var i = 0; i<hasil.result.length; i++){
+                  let temp = {
+                    id_league : hasil.result[i].league_key,
+                    league_name : hasil.result[i].league_name,
+                    country_name : hasil.result[i].country_name
+                  }
+                  arrTemp.push(temp);
+              }
+              res.status(200).send(arrTemp);
             }
         });
+        }
+      })
     });
 });
 
@@ -161,7 +181,7 @@ app.put('/api/updateLeague',(req,res)=>{
                 if(result.length==0){
                     res.status(404).send("User belum terdaftar atau api_hit anda habis");
                 }else{
-                    conn.query(`update leagues set league_name='${name}', country_name='${country}' where league_key='${key}'`,(error,result)=>{
+                    conn.query(`update leagues set league_name='${name}', country_name='${country}' where id_league='${key}'`,(error,result)=>{
                         api_hit = api_hit - 1;
                         if(error) res.status(500).send(error);
                         else{
@@ -203,7 +223,7 @@ app.delete('/api/deleteLeague',(req,res)=>{
                     if(result.length==0){
                         res.status(404).send("User belum terdaftar atau api_hit anda habis");
                     }else{
-                        conn.query(`delete from leagues where league_key='${key}'`,(error,result)=>{
+                        conn.query(`delete from leagues where id_league='${key}'`,(error,result)=>{
                             api_hit = api_hit - 1;
                             if(error) res.status(500).send(error);
                             else{
@@ -230,7 +250,7 @@ async function getLeagues(){
     return new Promise(function(resolve,reject){
         var options = {
             'method': 'GET',
-            'url': `https://allsportsapi.com/api/football/?met=Leagues&APIkey=${API_KEY_SPOR}`,
+            'url': `https://allsportsapi.com/api/football/?met=Leagues&APIkey=${API_KEY_SPORT}`,
             'headers':{
             }
         };

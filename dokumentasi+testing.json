@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "e69abf30-59f1-4e73-95d7-1c743e7120b5",
+		"name": "API FOOTBALL SOA",
+		"description": "Menyediakan layanan untuk memanggil api football tentang leagues",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Leagues",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "api_key",
+							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/getLeagues",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getLeagues"
+					]
+				},
+				"description": "User harus menjadi premium user\r\n\r\nDibutuhkan api_key pada bagian body x-www-urlencoded\r\n\r\nEndpoint menghasilkan result id_league,league_name,country_name dari database"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Leagues By Country",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0b432fdb-c2f4-4a97-a789-bd554314cf97",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"  \"type\": \"array\",\r",
+							"  \"items\": {\r",
+							"    \"type\": \"object\",\r",
+							"    \"propeties\": {\r",
+							"        \"id_league\":{\r",
+							"            \"type\" : \"integer\"\r",
+							"        },\r",
+							"        \"league_name\":{\r",
+							"            \"type\" : \"string\"\r",
+							"        },\r",
+							"        \"country_name\":{\r",
+							"            \"type\" : \"string\"\r",
+							"        }\r",
+							"    }\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json() , schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "api_key",
+							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/getLeaguesByCountry?name=Indonesia&=",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getLeaguesByCountry"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Indonesia"
+						},
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				},
+				"description": "Free User bisa mengakses endpoint ini\r\n\r\nDibutuhkan api_key pada bagian body x-www-urlencoded\r\n\r\nHarus diberi params dengan key country_name\r\n\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Update League",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Madura Cups",
+							"type": "text"
+						},
+						{
+							"key": "country",
+							"value": "Indonesia",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/updateLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"updateLeague"
+					]
+				},
+				"description": "Free User sudah bisa mengakses endpoint ini\r\n\r\nDibutuhkan key, name, country, api_key pada bagian body x-www-urlencoded\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete League",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/deleteLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"deleteLeague"
+					]
+				},
+				"description": "Free User bisa mengakses endpoint ini\r\n\r\nDibutuhkan key dan api_key pada bagian body x-www-urlencoded"
+			},
+			"response": []
+		},
+		{
+			"name": "Create League",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e4df3762-2392-44dd-a224-0b7d457b9a83",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "league_name",
+							"value": "Grab Competition",
+							"type": "text"
+						},
+						{
+							"key": "country_name",
+							"value": "Indonesia",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/createLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"createLeague"
+					]
+				},
+				"description": "Hanya user dengan tingkat premium yang bisa mengakses endpoint ini\r\n\r\nDibutuhkan league_name, country_name, dan api_key pada bagian body x-www-urlencoded"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "7b21074e-68b0-4b0a-96e6-a8f47a397557",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "818c5d4a-f553-4480-963f-2d40707c33d3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
