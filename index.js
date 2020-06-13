@@ -110,7 +110,7 @@ app.get("/api/getTeams",function(req,res){
 });
 
 //untuk mencari team dengan id_team yang spesifik
-app.get("/api/getTeamById/:team_id",function(req,res){
+app.get("/api/getTeamById/:team_id",function(req,res){  
     var team_id = req.params.team_id;
     pool.getConnection((err,conn)=>{
         conn.query(`select * from teams where team_id='${team_id}'`, (err,result)=>{
@@ -135,6 +135,111 @@ app.get("/api/getTeamsContaint/:chars",function(req,res){
     });
 });
 
+//untuk meregistrasikan team baru
+app.post("/api/addTeam",function(req,res){
+    var nama_user = req.body.nama_user;
+    var password_user = req.body.password_user;
+    var email_user = req.body.email_user;
+    var tipe_user = 0;
+    var saldo_user = 0;
+    var api_key = Math.random().toString().slice(2,12);
+
+    console.log(api_key);
+
+    var kembar = 0, kembarapi=0;
+    if (!nama_user||!password_user||!email_user) {
+        res.status(400).send("semua field harus terisi!");        
+    } else {
+        pool.query('select * from user', (error,rows,fields) => {
+            if (error) {
+                console.error(error);
+            } else {
+                rows.forEach(row=>{
+                    if(email_user==row.email_user){
+                        kembar=1;
+                    }
+                    do{//biar API tidak kembar
+                        api_key = Math.random().toString().slice(2,12);
+                        if (api_key==row.api_key) {
+                            kembarapi=1;
+                        }
+                    }while(kembarapi==1);
+                    console.log("HASIL RANDOM API : " + api_key);
+                });
+                if (kembar==1) {
+                    res.status(404).send("email_user telah terpakai!");
+                } else {
+                    pool.query("insert into user values(?,?,?,?,?,?)",[email_user,password_user,nama_user,saldo_user, api_key, tipe_user], (error, rows, fields) => {
+                        if (error) {
+                            console.error(error);
+                        } else {
+                            res.status(200).send("Register berhasil. API_KEY : " + api_key); 
+                        }
+                    });
+                }
+            }
+        }); 
+    }      
+});
+
+
+app.post("/api/createjobvacancy",function(req,res){
+    const api_key = req.body.api_key;
+
+    if (!api_key) {
+        res.status(400).send("field API_KEY harus terisi!");   
+    }
+    else{
+        pool.getConnection(function(err,conn){
+            if(err) res.status(500).send(err);
+            else{
+                conn.query(`select * from user where api_key='${api_key}'`,function(error,result){
+                    if(error ) res.status(500).send(error);
+                    else{
+                        if(result.length <=0){
+                            return res.status(400).send("user dengan api_key yang diinput tidak ditemukan");
+                        }
+                        conn.query(`select * from user where api_key='${api_key}'`,
+                        function(error,results){
+                            if(error) res.status(500).send(error);
+                            else{
+                                var tmp= JSON.parse(JSON.stringify(result[0]));
+                                var currHit = parseInt(tmp['api_hit']);
+
+                                if (currHit<1) {
+                                    return res.status(400).send("API_HIT user tidak cukup untuk membuat iklan lowongan pekerjaan!");
+                                } else {
+                                    var hitbaru = currHit - 1;
+
+                                    conn.query(`UPDATE user SET api_hit='${hitbaru}' WHERE api_key='${api_key}'`, function (err, result) {
+                                        if (err) res.status(500).send(error);
+                                        else{
+                                            const judul_iklan = req.body.judul_iklan;
+                                            const nama_perusahaan = req.body.nama_perusahaan;
+                                            const deskripsi_iklan = req.body.deskripsi_iklan;
+                                            const posisi_pekerjaan = req.body.posisi_pekerjaan;
+                                            const bidang_industri = req.body.bidang_industri;
+                                            const kota_perusahaan = req.body.kota_perusahaan;
+                                            const range_gaji = req.body.range_gaji;
+
+                                            pool.query("insert into lowongan_kerja values(?,?,?,?,?,?,?,?)",["",judul_iklan,nama_perusahaan,deskripsi_iklan,posisi_pekerjaan, bidang_industri, kota_perusahaan, range_gaji], (error, rows, fields) => {
+                                                if (error) {
+                                                    res.status(500).send(error);
+                                                } else {
+                                                    res.status(200).send("Berhasil menambah iklan lowongan pekerjaan."); 
+                                                }
+                                            });
+                                        }
+                                    });
+                                }              
+                            }
+                        });                    
+                    }
+                })
+            }
+        });
+    }
+});
 
 //=======================================================================================================================
 
