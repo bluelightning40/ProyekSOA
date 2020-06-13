@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2020 at 02:50 PM
+-- Generation Time: Jun 13, 2020 at 01:29 PM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -61,7 +61,7 @@ CREATE TABLE `goal_detail` (
 
 DROP TABLE IF EXISTS `leagues`;
 CREATE TABLE `leagues` (
-  `id_league` varchar(5) NOT NULL,
+  `id_league` int(5) NOT NULL,
   `league_name` varchar(255) NOT NULL,
   `country_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -71,9 +71,9 @@ CREATE TABLE `leagues` (
 --
 
 INSERT INTO `leagues` (`id_league`, `league_name`, `country_name`) VALUES
-('1', 'Surabaya cup', 'Indonesia'),
-('2', 'Surabaya cups', 'Indonesia'),
-('3', 'Surabaya cupsa', 'Indonesia');
+(1, 'Madura Cups', 'Indonesia'),
+(2, 'Surabaya cups', 'Indonesia'),
+(4, 'Grab Competition', 'Indonesia');
 
 -- --------------------------------------------------------
 
@@ -145,11 +145,17 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `email_user`, `password`, `api_hit`, `api_key`, `status`, `last_update`) VALUES
-('abc', 'a@b.c', 'abc', 0, 'BW2h61YbIBlJFlx9e7NsKErU6', 0, '2020-06-12');
+('abc', 'a@b.c', 'abc', 2, 'BW2h61YbIBlJFlx9e7NsKErU6', 2, '2020-06-13');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `leagues`
+--
+ALTER TABLE `leagues`
+  ADD PRIMARY KEY (`id_league`);
 
 --
 -- Indexes for table `matches`
@@ -172,6 +178,12 @@ ALTER TABLE `teams`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `leagues`
+--
+ALTER TABLE `leagues`
+  MODIFY `id_league` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `matches`
