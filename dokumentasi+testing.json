@@ -8,6 +8,20 @@
 	"item": [
 		{
 			"name": "Get Leagues",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0d977639-6294-4a0b-bdbd-259a2a1cfbf0",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -22,7 +36,10 @@
 							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
 							"type": "text"
 						}
-					]
+					],
+					"options": {
+						"urlencoded": {}
+					}
 				},
 				"url": {
 					"raw": "localhost:3000/api/getLeagues",
@@ -91,10 +108,13 @@
 							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
 							"type": "text"
 						}
-					]
+					],
+					"options": {
+						"urlencoded": {}
+					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/getLeaguesByCountry?name=Indonesia&=",
+					"raw": "localhost:3000/api/getLeaguesByCountry?name=Indonesia",
 					"host": [
 						"localhost"
 					],
@@ -110,7 +130,8 @@
 						},
 						{
 							"key": "",
-							"value": ""
+							"value": "",
+							"disabled": true
 						}
 					]
 				},
@@ -120,6 +141,21 @@
 		},
 		{
 			"name": "Update League",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bffb5d85-623d-42b1-b497-630bb07e5e6a",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -146,7 +182,10 @@
 							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
 							"type": "text"
 						}
-					]
+					],
+					"options": {
+						"urlencoded": {}
+					}
 				},
 				"url": {
 					"raw": "localhost:3000/api/updateLeague",
@@ -165,6 +204,20 @@
 		},
 		{
 			"name": "Delete League",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "01375576-698d-48a1-b182-5d56e6a17dec",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -181,7 +234,10 @@
 							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
 							"type": "text"
 						}
-					]
+					],
+					"options": {
+						"urlencoded": {}
+					}
 				},
 				"url": {
 					"raw": "localhost:3000/api/deleteLeague",
@@ -207,8 +263,9 @@
 						"id": "e4df3762-2392-44dd-a224-0b7d457b9a83",
 						"exec": [
 							"pm.test(\"Status code is code\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -222,7 +279,7 @@
 					"urlencoded": [
 						{
 							"key": "league_name",
-							"value": "Grab Competition",
+							"value": "LoL Competition",
 							"type": "text"
 						},
 						{
@@ -235,7 +292,10 @@
 							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
 							"type": "text"
 						}
-					]
+					],
+					"options": {
+						"urlencoded": {}
+					}
 				},
 				"url": {
 					"raw": "localhost:3000/api/createLeague",
