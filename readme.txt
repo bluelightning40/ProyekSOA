@@ -12,9 +12,17 @@ Endpoint :
 11. RegisterUser (DONE)
 12. UpgradeUser (DONE)
 13. getLeagues (DONE + 3rd API)
+14. addTeam (DONE)
+15. getTeamsFromDatabase (DONE)
+16. getTeamById (DONE)
+17. updateTeam (DONE)
+18. addMatch (DONE)
+19. addGoalDetail (DONE)
+20. addCardDetail (DONE)
 
-POST = 7
+POST = 12
 GET = 4
+PUT = 2
 
 Authentication & Authorization
 
