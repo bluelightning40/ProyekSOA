@@ -82,7 +82,7 @@ app.post('/api/createLeague',(req,res)=>{
                                         });
                                     }
                                 });
-                                        
+
 
                             }
                         }
@@ -315,7 +315,7 @@ app.get("/api/getTeamById/:team_id",function(req,res){
 
 //=======================================================================================================================
 
-app.post("/api/RecuitPlayer",function(req,res){
+app.get("/api/RecruitPlayer",function(req,res){
   team_id = req.body.team_id;
   id_player = req.body.id_player;
   api_key = req.body.api_key;
@@ -329,7 +329,7 @@ app.post("/api/RecuitPlayer",function(req,res){
             if(err) res.status(500).send(err);
             else{
               api_hit = api_hit-1;
-              conn.query(`update user set api_hit = ${api_hit} where api_key=${api_key}`,(err,result)=>{
+              conn.query(`update user set api_hit = ${api_hit} where api_key='${api_key}'`,(err,result)=>{
                 if(err) res.status(500).send(err);
                 else{
                   res.status(201).send('Rekrut Player ' + id_player + ' berhasil')
@@ -360,7 +360,7 @@ app.post("/api/PecatPemain",function(req,res){
             if(err) res.status(500).send(err);
             else{
               api_hit = api_hit-1;
-              conn.query(`update user set api_hit = ${api_hit} where api_key=${api_key}`,(err,result)=>{
+              conn.query(`update user set api_hit = ${api_hit} where api_key='${api_key}'`,(err,result)=>{
                 if(err) res.status(500).send(err);
                 else{
                   res.status(201).send('Pecat Player ' + id_player + ' berhasil')
@@ -417,7 +417,7 @@ app.post("/api/loginUser", function(req,res){
         if(err) res.status(500).send(err)
         else{
           if(result.length>0){
-            res.status(201).send("API key = " + result[0]);
+            res.status(201).send("API key = " + result[0].api_key);
           }
           else{
             res.status(400).send("User belum terdaftar!!")
@@ -446,6 +446,7 @@ app.post("/api/UpgradeUser/:upgrade_to", function(req,res){
   var email = req.body.stripeEmail;
 
   var amount = 0;
+  
   if(upgrade_to==1){
     amount = 500;
   }
