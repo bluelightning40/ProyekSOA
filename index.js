@@ -111,20 +111,8 @@ app.post('/api/addTeam',(req,res)=>{
                 var api_hit = result[0].api_hit;
                 if(err) res.status(500).send(err);
                 else{
-<<<<<<< Updated upstream
-                    if(result.length > 0){
-                        res.status(404).send('ID_TEAM sudah terpakai!');
-                    }else{
-                        conn.query(`insert into teams values('${team_id}','${team_name}','${team_league_id}','${team_logo}')`,(errors,row)=>{
-                            if(errors) res.status(500).send(errors);
-                            else{
-                                res.status(201).send('Add Team ' + team_name + ' berhasil');
-                            }
-                        });                        
-=======
                     if(result.length==0){
                         return res.status(400).send("upgrade ke premium user untuk akses fitur ini");
->>>>>>> Stashed changes
                     }
                     conn.query(`select * from teams where id_team='${id_team}'`, async (err,result)=>{
                         if(err) res.status(500).send(err);
@@ -161,13 +149,8 @@ app.post('/api/addTeam',(req,res)=>{
     }
 });
 
-<<<<<<< Updated upstream
-//untuk mendapatkan data semua team
-app.get("/api/getTeams",function(req,res){
-=======
 //free feature - tidak butuh api_hit
 app.get("/api/getTeamsFromDatabase",function(req,res){ 
->>>>>>> Stashed changes
     pool.getConnection((err,conn)=>{
         conn.query(`select * from teams`, (err,result)=>{
             if(err) res.status(500).send(err);
@@ -191,13 +174,11 @@ app.get("/api/getTeamById/:team_id",function(req,res){
     });
 });
 
-<<<<<<< Updated upstream
 //untuk mencari team dengan nama team yang mengandung huruf tertentu (inputan)
 app.get("/api/getTeamsContaint/:chars",function(req,res){
     var chars = req.params.chars;
     pool.getConnection((err,conn)=>{
         conn.query(`select * from teams where team_id LIKE '%${chars}%'`, (err,result)=>{
-=======
 //cost 1 api_hit
 app.put('/api/updateTeam',(req,res)=>{
     var id_team = req.body.id_team;
@@ -258,7 +239,7 @@ app.post('/api/addMatch',(req,res)=>{
     if(!api_key || !id_match || !league_key || !away_team || !home_team || !away_score || !home_score || !date || !time){
         res.status(400).send('Semua field harus di isi');
     }else{
-        pool.getConnection((err,conn)=>{
+        pool.getConnection((err,conn)=>{ 
             conn.query(`select * from user where api_key='${api_key}' and api_hit>0 and status=2`,(err,result)=>{
                 var api_hit = result[0].api_hit;
                 if(err) res.status(500).send(err);
@@ -439,7 +420,6 @@ app.post("/api/RecuitPlayer",function(req,res){
         if(result.length>0){
           api_hit = result[0].api_hit;
           conn.query(`update player set id_team=${team_id} where id_player='${id_player}'`,(err,result)=>{
->>>>>>> Stashed changes
             if(err) res.status(500).send(err);
             else{
                 res.status(404).send(result);
