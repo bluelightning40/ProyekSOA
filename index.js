@@ -22,10 +22,10 @@ app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'ejs')
 
 const pool = mysql.createPool({
-    host:"sql12.freemysqlhosting.net",
-    database:"sql12348366",
-    user:"sql12348366",
-    password:"t7D7GaLNUE"
+    host:process.env.HOST,
+    database: process.env.DB,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS
 })
 
 //User Sstatus Code
