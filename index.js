@@ -22,10 +22,10 @@ app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'ejs')
 
 const pool = mysql.createPool({
-    host:"localhost",
-    database:"proyek_soa",
-    user:"root",
-    password:""
+    host:"sql12.freemysqlhosting.net",
+    database:"sql12348366",
+    user:"sql12348366",
+    password:"t7D7GaLNUE"
 })
 
 //User Sstatus Code
@@ -413,7 +413,6 @@ app.put('/api/updateTeam',(req,res)=>{
     });
 });
 
-
 //cost 1 api_hit
 app.post('/api/addMatch',(req,res)=>{
     var id_match = req.body.id_match;
@@ -470,7 +469,6 @@ app.post('/api/addMatch',(req,res)=>{
         });
     }
 });
-
 
 //cost 1 api_hit
 app.post('/api/addGoalDetail',(req,res)=>{
@@ -806,7 +804,6 @@ setInterval(function(){
 },5000);
 
 //=======================================================================================================================
-
 
 app.listen(port, function(){
     console.log(`LISTENING TO PORT ${port}!`);
