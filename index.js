@@ -9,6 +9,7 @@ const port = process.env.PORT;
 
 const express = require('express');
 var dateTime = require('node-datetime');
+var multer = require('multer');
 const app = express();
 const mysql = require('mysql');
 var request = require('request');
@@ -31,6 +32,13 @@ const pool = mysql.createPool({
     user: process.env.DB_USER,
     password: process.env.DB_PASS
 })
+
+// const pool = mysql.createPool({
+//     host:"localhost",
+//     database:"proyek_soa",
+//     user:"root",
+//     password:""
+// })
 
 //User Sstatus Code
 
