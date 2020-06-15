@@ -652,6 +652,50 @@ app.post('/api/addCardDetail',(req,res)=>{
 
 //=======================================================================================================================
 
+app.post("/api/addPlayer",function(req,res){
+  id_team = req.body.team_id;
+  nationality = req.body.nationality;
+  age = req.body.age;
+  position = req.body.position;
+  player_name = req.body.player_name;
+  api_key = req.body.api_key;
+  pool.getConnection((err,conn)=>{
+    conn.query(`select * from user where api_key='${api_key}' and api_hit>0`, (err,result)=>{
+      if(err) res.status(500).send(err);
+      else{
+        if(result.length>0){
+          api_hit = result[0].api_hit;
+          conn.query(`select * from player where player_name='${player_name}'`,(err,result)=>{
+            if(err) res.status(500).send(err);
+            else{
+              if(result.length>0){
+                res.status(402).send('Player sudah terdaftar');
+              }
+              else{
+                conn.query(`insert into player (id_team, nationality, age, position, player_name) values(${id_team},'${nationality}',${age},'${position}','${player_name}')`, (err,result)=>{
+                  if(err) res.status(500).send(err);
+                  else{
+                    api_hit = api_hit-1;
+                    conn.query(`update user set api_hit = ${api_hit} where api_key = '${api_key}'`,(err,result)=>{
+                      if(err) res.status(500).send(err);
+                      else{
+                        res.status(200).send("Add Player Berhasil");
+                      }
+                    })
+                  }
+                })
+              }
+            }
+          })
+        }
+        else{
+          res.status(402).send("API key tidak valid atau sudah mencapai batas akses API per hari");
+        }
+      }
+    })
+  })
+});
+
 app.get("/api/RecruitPlayer",function(req,res){
   team_id = req.body.team_id;
   id_player = req.body.id_player;
@@ -762,7 +806,7 @@ app.post("/api/RegisterUser", function(req,res){
             conn.query(`insert into user values('${id_user}','${email}','${password}',${api_hit},'${api_key}',${status},'${formatted}')`, (err,result)=>{
               if(err) res.status(500).send(err);
               else{
-                res.status(201).send("API key = " + api_key)
+                res.status(201).send("Registrasi Berhasil");
               }
             })
           }
@@ -784,7 +828,7 @@ app.post("/api/loginUser", function(req,res){
         if(err) res.status(500).send(err)
         else{
           if(result.length>0){
-            res.status(201).send("API key = " + result[0].api_key);
+            res.status(201).send(result[0]);
           }
           else{
             res.status(400).send("User belum terdaftar!!")
