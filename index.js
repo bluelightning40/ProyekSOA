@@ -605,16 +605,36 @@ app.get("/api/RecruitPlayer",function(req,res){
       else{
         if(result.length>0){
           api_hit = result[0].api_hit;
-          conn.query(`update player set id_team=${team_id} where id_player='${id_player}'`,(err,result)=>{
+          conn.query(`select * from player where id_player='${id_player}'`,(err,result)=>{
             if(err) res.status(500).send(err);
             else{
-              api_hit = api_hit-1;
-              conn.query(`update user set api_hit = ${api_hit} where api_key='${api_key}'`,(err,result)=>{
-                if(err) res.status(500).send(err);
-                else{
-                  res.status(201).send('Rekrut Player ' + id_player + ' berhasil')
-                }
-              })
+              if(result.length>0){
+                conn.query(`select * from teams where id_team=${team_id}`,(err,result)=>{
+                  if(err) res.status(500).send(err);
+                  else{
+                    if(result.length>0){
+                      conn.query(`update player set id_team=${team_id} where id_player='${id_player}'`,(err,result)=>{
+                        if(err) res.status(500).send(err);
+                        else{
+                          api_hit = api_hit-1;
+                          conn.query(`update user set api_hit = ${api_hit} where api_key='${api_key}'`,(err,result)=>{
+                            if(err) res.status(500).send(err);
+                            else{
+                              res.status(201).send('Rekrut Player ' + id_player + ' berhasil')
+                            }
+                          })
+                        }
+                      })
+                    }
+                    else{
+                      res.status(404).send('Team Tidak Terdaftar !!');
+                    }
+                  }
+                })
+              }
+              else{
+                res.status(404).send('Player Tidak Terdaftar !!');
+              }
             }
           })
         }
@@ -635,17 +655,27 @@ app.post("/api/PecatPemain",function(req,res){
       if(err) res.status(500).send(err);
       else{
         if(result.length>0){
-          api_hit = result[0].api_hit;
-          conn.query(`update player set id_team=0 where id_player='${id_player}'`,(err,result)=>{
+          conn.query(`select * from player where id_player='${id_player}'`,(err, result)=>{
             if(err) res.status(500).send(err);
             else{
-              api_hit = api_hit-1;
-              conn.query(`update user set api_hit = ${api_hit} where api_key='${api_key}'`,(err,result)=>{
-                if(err) res.status(500).send(err);
-                else{
-                  res.status(201).send('Pecat Player ' + id_player + ' berhasil')
-                }
-              })
+              if(result.length>0){
+                api_hit = result[0].api_hit;
+                conn.query(`update player set id_team=0 where id_player='${id_player}'`,(err,result)=>{
+                  if(err) res.status(500).send(err);
+                  else{
+                    api_hit = api_hit-1;
+                    conn.query(`update user set api_hit = ${api_hit} where api_key='${api_key}'`,(err,result)=>{
+                      if(err) res.status(500).send(err);
+                      else{
+                        res.status(201).send('Pecat Player ' + id_player + ' berhasil')
+                      }
+                    })
+                  }
+                })
+              }
+              else{
+                res.status(404).send('Player Tidak Terdaftar !!');
+              }
             }
           })
         }
