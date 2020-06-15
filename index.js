@@ -267,11 +267,39 @@ async function getLeagues(){
 
 //=======================================================================================================================
 
+var filename = ""; //untuk simpen nama file
+
+//SET STORAGE ENGINE
+const storage=multer.diskStorage({
+    destination:'./public/uploads',
+    filename:function(req,file,cb){
+        filename = file.originalname;
+        cb(null,filename);
+    }
+});
+
+let upload = multer({
+  storage: storage,
+  fileFilter:function(req,file,cb){
+    checkFileType(file,cb);
+  }
+});
+
+function checkFileType(file,cb){
+    const filetypes= /jpeg|jpg|png|gif/;
+    const extname=filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype=filetypes.test(file.mimetype);
+    if(mimetype && extname){
+        return cb(null,true);
+    }else{
+        cb('Error: Image Only!');
+    }
+}
 async function getTeams(ctrid){
     return new Promise(function(resolve,reject){
         var options = {
             'method': 'GET',
-            'url': `https://allsportsapi.com/api/football/?&met=Teams&teamId='${ctrid}'&APIkey=${API_KEY_SPOR}`,
+            'url': `https://allsportsapi.com/api/football/?&met=Teams&teamId='${ctrid}'&APIkey=${API_KEY_SPORT}`,
             'headers':{
             }
         };
@@ -283,13 +311,14 @@ async function getTeams(ctrid){
 }
 
 //cost 1 api_hit
-app.post('/api/addTeam',(req,res)=>{
+app.post('/api/addTeam',upload.single('team_logo'), async function(req,res){
     var id_team = req.body.id_team;
     var team_name = req.body.team_name;
     var team_league_id = req.body.team_league_id;
     var api_key = req.body.api_key;
-    var team_logo = req.body.team_logo;
-    if(!team_league_id || !team_name || !team_id){
+    var team_logo = filename;
+
+    if(!team_league_id || !team_name || !id_team || !api_key){
         res.status(400).send('Semua field harus di isi');
     }else{
         pool.getConnection((err,conn)=>{
@@ -759,7 +788,7 @@ app.post("/api/UpgradeUser/:upgrade_to", function(req,res){
   else if(upgrade_to==2){
     amount = 1000;
   }
-
+  console.log(upgrade_to);
   console.log(req.body);
 
   pool.getConnection((err,conn)=>{
