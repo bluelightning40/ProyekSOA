@@ -18,6 +18,12 @@ const exphbs = require('express-handlebars');
 const fs = require('fs');
 const stripe = require('stripe')(stripeSecretKey)
 const midtransClient = require('midtrans-client')
+
+app.engine('handlebars',exphbs({defaultLayout:'main'}));
+app.set('view engine','handlebars');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(express.static(`${__dirname}/public`));
 app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'ejs')
 
@@ -737,14 +743,6 @@ app.post("/api/loginUser", function(req,res){
     })
   }
 })
-
-app.engine('handlebars',exphbs({defaultLayout:'main'}));
-app.set('view engine','handlebars');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:false}));
-
-app.use(express.static(`${__dirname}/public`));
 
 app.get("/",function(req,res){
   res.render('index');
