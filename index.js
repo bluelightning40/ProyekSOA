@@ -109,12 +109,12 @@ app.get('/api/getLeagues',(req,res)=>{
   var api_key = req.body.api_key;
     pool.getConnection((error,conn)=>{
       conn.query(`select * from user where api_key='${api_key}' and api_hit>0 and status=2`,(errors,row)=>{
-        var api_hit = row[0].api_hit;
         if(errors) res.status(500).errors
         else{
           if(row.length==0){
             return res.status(400).send("Upgrade Layanan User Anda Menjadi Premium");
           }
+          var api_hit = row[0].api_hit;
           conn.query(`select * from leagues`, async (error,result)=>{
             if(error) res.status(500).send(error);
             else{
@@ -180,19 +180,19 @@ app.put('/api/updateLeague',(req,res)=>{
     var name = req.body.name;
     var country = req.body.country;
     var api_key = req.body.api_key;
-    if(key==undefined){
+    if(key==undefined || key==""){
         res.status(400).send("Harus ada league_key");
-    }else if(name==undefined && country==undefined){
+    }else if((name==undefined && country==undefined) ||(name=="" && country=="")){
         res.status(400).send("Harus ada yang diupdate")
     }
     pool.getConnection((error,conn)=>{
         conn.query(`select * from user where api_key='${api_key}' and api_hit>0`,(err,result)=>{
-            var api_hit = result[0].api_hit;
             if(err) res.status(500).send(err);
             else{
                 if(result.length==0){
                     res.status(404).send("User belum terdaftar atau api_hit anda habis");
                 }else{
+                    var api_hit = result[0].api_hit;
                     conn.query(`update leagues set league_name='${name}', country_name='${country}' where id_league='${key}'`,(error,result)=>{
                         api_hit = api_hit - 1;
                         if(error) res.status(500).send(error);
@@ -352,7 +352,7 @@ app.post('/api/addTeam',upload.single('team_logo'), async function(req,res){
                             if(result.length > 0){
                                 return res.status(404).send('ID_TEAM sudah terpakai!');
                             }else{
-                                conn.query(`insert into teams values('${id_team}','${team_name}','${team_league_id}','${team_logo}')`,(errors,row)=>{
+                                conn.query(`insert into teams (team_name,team_league_id,team_logo) values('${team_name}','${team_league_id}','${team_logo}')`,(errors,row)=>{
                                     if(errors) res.status(500).send(errors);
                                     else{
                                         api_hit = api_hit - 1;
@@ -383,7 +383,7 @@ app.get("/api/getTeamsFromDatabase",function(req,res){
             conn.query(`select * from teams`, (err,result)=>{
                 if(err) res.status(500).send(err);
                 else{
-                    res.status(404).send(result);
+                    res.status(201).send(result);
                 }
             });
         });
@@ -401,7 +401,7 @@ app.get("/api/getTeamById/:team_id",function(req,res){
             conn.query(`select * from teams where id_team='${team_id}'`, (err,result)=>{
                 if(err) res.status(500).send(err);
                 else{
-                    res.status(404).send(result);
+                    res.status(201).send(result);
                 }
             });
         });
@@ -419,7 +419,7 @@ app.get("/api/getTeamsContaint/:chars",function(req,res){
             conn.query(`select * from teams where team_name LIKE '%${chars}%'`, (err,result)=>{
                 if(err) res.status(500).send(err);
                 else{
-                    res.status(404).send(result);
+                    res.status(201).send(result);
                 }
             });
         });
@@ -497,15 +497,15 @@ app.post('/api/addMatch',(req,res)=>{
                         if(err) res.status(500).send(err);
                         else{
                             if(resultleague.length==0){
-                                return res.status(400).send("ID LEAGUE NOT FOUND!");
+                                return res.status(404).send("ID LEAGUE NOT FOUND!");
                             }
                             conn.query(`select * from teams where id_team='${home_team}' OR id_team='${away_team}'`, async (err,resultteam)=>{
                                 if(err) res.status(500).send(err);
                                 else{
                                     if(resultteam.length!=2){ // 2 id tim harus ada
-                                        return res.status(400).send("ID TEAM NOT FOUND!");
+                                        return res.status(404).send("ID TEAM NOT FOUND!");
                                     }
-                                    conn.query(`insert into matches values('${id_match}','${league_key}','${away_team}','${home_team}','${home_score}','${away_score}','${date}','${time}')`,(errors,row)=>{
+                                    conn.query(`insert into matches (league_key, away_team, home_team, home_score, away_score, date, time) values(${league_key},${away_team},${home_team},${home_score},${away_score},'${date}','${time}')`,(errors,row)=>{
                                         if(errors) res.status(500).send(errors);
                                         else{
                                             api_hit = api_hit - 1;
