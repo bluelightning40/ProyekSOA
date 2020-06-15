@@ -303,6 +303,7 @@ function checkFileType(file,cb){
         cb('Error: Image Only!');
     }
 }
+
 async function getTeams(ctrid){
     return new Promise(function(resolve,reject){
         var options = {
@@ -374,40 +375,55 @@ app.post('/api/addTeam',upload.single('team_logo'), async function(req,res){
 
 //free feature - tidak butuh api_hit
 app.get("/api/getTeamsFromDatabase",function(req,res){
-    pool.getConnection((err,conn)=>{
-        conn.query(`select * from teams`, (err,result)=>{
-            if(err) res.status(500).send(err);
-            else{
-                res.status(404).send(result);
-            }
+    var api_key = req.query.api_key;
+    if(!api_key){
+        res.status(400).send('inputkan api_key untuk menggunakan fitur ini');
+    }else{
+        pool.getConnection((err,conn)=>{
+            conn.query(`select * from teams`, (err,result)=>{
+                if(err) res.status(500).send(err);
+                else{
+                    res.status(404).send(result);
+                }
+            });
         });
-    });
+    }
 });
 
 //untuk mencari team dengan id_team yang spesifik
 app.get("/api/getTeamById/:team_id",function(req,res){
     var team_id = req.params.team_id;
-    pool.getConnection((err,conn)=>{
-        conn.query(`select * from teams where team_id='${team_id}'`, (err,result)=>{
-            if(err) res.status(500).send(err);
-            else{
-                res.status(404).send(result);
-            }
+    var api_key = req.query.api_key;
+    if(!api_key){
+        res.status(400).send('inputkan api_key untuk menggunakan fitur ini');
+    }else{
+        pool.getConnection((err,conn)=>{
+            conn.query(`select * from teams where id_team='${team_id}'`, (err,result)=>{
+                if(err) res.status(500).send(err);
+                else{
+                    res.status(404).send(result);
+                }
+            });
         });
-    });
+    }
 });
 
 //untuk mencari team dengan nama team yang mengandung huruf tertentu (inputan)
 app.get("/api/getTeamsContaint/:chars",function(req,res){
     var chars = req.params.chars;
-    pool.getConnection((err,conn)=>{
-        conn.query(`select * from teams where team_id LIKE '%${chars}%'`, (err,result)=>{
-            if(err) res.status(500).send(err);
-            else{
-                res.status(404).send(result);
-            }
+    var api_key = req.query.api_key;
+    if(!api_key){
+        res.status(400).send('inputkan api_key untuk menggunakan fitur ini');
+    }else{
+        pool.getConnection((err,conn)=>{
+            conn.query(`select * from teams where team_name LIKE '%${chars}%'`, (err,result)=>{
+                if(err) res.status(500).send(err);
+                else{
+                    res.status(404).send(result);
+                }
+            });
         });
-    });
+    }
 });
 
 //cost 1 api_hit
