@@ -698,7 +698,7 @@ app.post("/api/RegisterUser", function(req,res){
   api_key = randomstring.generate(25);
   if(id_user != undefined && password != undefined){
     pool.getConnection((err,conn)=>{
-      conn.query(`select * from user where id_user = '${id_user}'`, (err,result)=>{
+      conn.query(`select * from user where id_user = '${id_user}' or email_user='${email}'`, (err,result)=>{
         if(err) res.status(500).send(err)
         else{
           if(result.length==0){
