@@ -686,7 +686,7 @@ app.get("/api/RecruitPlayer",function(req,res){
     })
 
   })
-})
+});
 
 app.post("/api/PecatPemain",function(req,res){
   id_player = req.body.id_player;
@@ -726,7 +726,7 @@ app.post("/api/PecatPemain",function(req,res){
       }
     })
   })
-})
+});
 
 app.post("/api/RegisterUser", function(req,res){
   id_user = req.body.id_user;
@@ -757,7 +757,7 @@ app.post("/api/RegisterUser", function(req,res){
       })
     })
   }
-})
+});
 
 app.post("/api/loginUser", function(req,res){
   id_user = req.body.id_user;
@@ -777,11 +777,11 @@ app.post("/api/loginUser", function(req,res){
       })
     })
   }
-})
+});
 
 app.get("/",function(req,res){
   res.render('index');
-})
+});
 
 app.post("/api/UpgradeUser/:upgrade_to", function(req,res){
   //var id_user = req.body.id_user;
