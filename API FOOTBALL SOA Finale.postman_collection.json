@@ -1,0 +1,4796 @@
+{
+	"info": {
+		"_postman_id": "e6f7ed29-afb7-4d98-ab24-eb83f780c1f5",
+		"name": "API FOOTBALL SOA",
+		"description": "Menyediakan layanan untuk memanggil api football tentang leagues",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2548ae1c-cf90-4cf1-9c39-35efc984d9fb",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "54b8bba9-1bdc-4a2f-ba5c-c71ee81a3ebf",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_user",
+							"value": "zamorano",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "zamorano@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "pass",
+							"value": "zamorano",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/RegisterUser",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"RegisterUser"
+					]
+				},
+				"description": "Endpoint ini digunakan untuk melakukan registrasi terhadap user. Input endpoint ini ada 3 yaitu id_user, email(email user), dan pass(password user). sedangkan outputnya berupa API key dari user yang didaftarkan tadi. Pada endpoint ini data-data user nantinya akan di insert kan ke dalam database yang telah disediakan. Pada tabel user terdapat 3 jenis user yaitu normal, lite, dan premium. Jenis user ini membedakan jumlah akses dari endpoint dalam satu hari dari seorang user."
+			},
+			"response": []
+		},
+		{
+			"name": "Register User Fail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2548ae1c-cf90-4cf1-9c39-35efc984d9fb",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "54b8bba9-1bdc-4a2f-ba5c-c71ee81a3ebf",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_user",
+							"value": "zamorano",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "zamorano@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "pass",
+							"value": "zamorano",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/RegisterUser",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"RegisterUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f57c58bd-949f-460c-b933-4f63c1499ccd",
+						"exec": [
+							"pm.test(\"Status Code\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"GET API KEY\", function(){\r",
+							"    let jsonData = pm.response.json();\r",
+							"    console.log(jsonData['api_key']);    \r",
+							"    pm.environment.set('api_key',jsonData['api_key']);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ccb72d7a-9426-4ed1-a483-76db5effae77",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_user",
+							"value": "zamorano",
+							"type": "text"
+						},
+						{
+							"key": "pass",
+							"value": "zamorano",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
+							"type": "text",
+							"disabled": true
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/loginUser",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"loginUser"
+					]
+				},
+				"description": "Endpoint ini digunakan agar user dapat mengakses API key yang ia miliki. Endpoint ini memiliki 2 input yaitu id_user(id user) dan pass (password user) dan outputnya berupa API key dari user yang login tersebut"
+			},
+			"response": []
+		},
+		{
+			"name": "Login User Fail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f57c58bd-949f-460c-b933-4f63c1499ccd",
+						"exec": [
+							"pm.test(\"Status Code\", function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ccb72d7a-9426-4ed1-a483-76db5effae77",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_user",
+							"value": "zamorano1",
+							"type": "text"
+						},
+						{
+							"key": "pass",
+							"value": "zamoranos",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "BW2h61YbIBlJFlx9e7NsKErU6",
+							"type": "text",
+							"disabled": true
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/loginUser",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"loginUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Leagues",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1ec18b58-1d91-4e2a-82de-0df981f50bea",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4b5c2281-dc78-418a-bb97-59f426132ba6",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/getLeagues",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getLeagues"
+					]
+				},
+				"description": "User harus menjadi premium user\r\n\r\nDibutuhkan api_key pada bagian body x-www-urlencoded\r\n\r\nEndpoint menghasilkan result id_league,league_name,country_name dari database"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Leagues Fail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1ec18b58-1d91-4e2a-82de-0df981f50bea",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4b5c2281-dc78-418a-bb97-59f426132ba6",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/getLeagues",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getLeagues"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Leagues By Country",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a749c12a-c7ae-4cc9-ba6d-c3fe26e62db4",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"  \"type\": \"array\",\r",
+							"  \"items\": {\r",
+							"    \"type\": \"object\",\r",
+							"    \"propeties\": {\r",
+							"        \"id_league\":{\r",
+							"            \"type\" : \"integer\"\r",
+							"        },\r",
+							"        \"league_name\":{\r",
+							"            \"type\" : \"string\"\r",
+							"        },\r",
+							"        \"country_name\":{\r",
+							"            \"type\" : \"string\"\r",
+							"        }\r",
+							"    }\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json() , schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/getLeaguesByCountry?name=Indonesia",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getLeaguesByCountry"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Indonesia"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Free User bisa mengakses endpoint ini\r\n\r\nDibutuhkan api_key pada bagian body x-www-urlencoded\r\n\r\nHarus diberi params dengan key country_name\r\n\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Leagues By Country Tanpa Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a749c12a-c7ae-4cc9-ba6d-c3fe26e62db4",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/getLeaguesByCountry",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getLeaguesByCountry"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "Indonesia",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Leagues By Country API key Tidak Valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a749c12a-c7ae-4cc9-ba6d-c3fe26e62db4",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/getLeaguesByCountry?name=Indonesia",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getLeaguesByCountry"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "Indonesia"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Leagues By Country Bad Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a749c12a-c7ae-4cc9-ba6d-c3fe26e62db4",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/getLeaguesByCountry?name=Am",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getLeaguesByCountry"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Am"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create League",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dca46f3b-95c2-458a-9121-edc6982db110",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "17c80f2e-6ab0-44a2-bb01-48938908d230",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "league_name",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "country_name",
+							"value": "Madura Cups",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/createLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"createLeague"
+					]
+				},
+				"description": "Hanya user dengan tingkat premium yang bisa mengakses endpoint ini\r\n\r\nDibutuhkan league_name, country_name, dan api_key pada bagian body x-www-urlencoded"
+			},
+			"response": []
+		},
+		{
+			"name": "Create League API key Tidak Valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dca46f3b-95c2-458a-9121-edc6982db110",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "17c80f2e-6ab0-44a2-bb01-48938908d230",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "league_name",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "country_name",
+							"value": "Madura Cups",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/createLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"createLeague"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create League Bad Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dca46f3b-95c2-458a-9121-edc6982db110",
+						"exec": [
+							"pm.test(\"Status code is code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "17c80f2e-6ab0-44a2-bb01-48938908d230",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "league_name",
+							"value": "Madura Cups",
+							"type": "text"
+						},
+						{
+							"key": "country_name",
+							"value": "Indonesia",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/createLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"createLeague"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update League",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "32c8ef8e-2493-420b-9a08-a808594bb3be",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "6f015b8c-27eb-4d80-b663-42ff471b4d15",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Madura Cups",
+							"type": "text"
+						},
+						{
+							"key": "country",
+							"value": "Indonesia",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/updateLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"updateLeague"
+					]
+				},
+				"description": "Free User sudah bisa mengakses endpoint ini\r\n\r\nDibutuhkan key, name, country, api_key pada bagian body x-www-urlencoded\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Update League API key TIdak Valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "32c8ef8e-2493-420b-9a08-a808594bb3be",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "6f015b8c-27eb-4d80-b663-42ff471b4d15",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_login\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"key\":\"\",\r",
+							"            \"name\":\"zamorano\",\r",
+							"            \"country\":\"\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"key\":\"1\",\r",
+							"            \"name\":\"Madura Cups\",\r",
+							"            \"country\":\"Indonesia\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"key\":\"3\",\r",
+							"            \"name\":\"Barclays Premiere League\",\r",
+							"            \"country\":\"UK\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {   \r",
+							"            \"key\":\"2\",\r",
+							"            \"name\":\"La Liga\",\r",
+							"            \"country\":\"Spain\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"key\",current_data[\"key\"]);\r",
+							"pm.environment.set(\"name\",current_data[\"name\"]);\r",
+							"pm.environment.set(\"country\",current_data[\"country\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_login\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Madura Cups",
+							"type": "text"
+						},
+						{
+							"key": "country",
+							"value": "Indonesia",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/updateLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"updateLeague"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update League Bad Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "32c8ef8e-2493-420b-9a08-a808594bb3be",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "6f015b8c-27eb-4d80-b663-42ff471b4d15",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "100",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Madura Cups",
+							"type": "text"
+						},
+						{
+							"key": "country",
+							"value": "Indonesia",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/updateLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"updateLeague"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete League",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "081e6338-da57-44af-8aee-a3235d6da5bf",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1c28a322-5763-45af-ae1c-40a9d0923363",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/deleteLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"deleteLeague"
+					]
+				},
+				"description": "Free User bisa mengakses endpoint ini\r\n\r\nDibutuhkan key dan api_key pada bagian body x-www-urlencoded"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete League API Key Tidak Valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "081e6338-da57-44af-8aee-a3235d6da5bf",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1c28a322-5763-45af-ae1c-40a9d0923363",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/deleteLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"deleteLeague"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete League Bad Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "081e6338-da57-44af-8aee-a3235d6da5bf",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1c28a322-5763-45af-ae1c-40a9d0923363",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/deleteLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"deleteLeague"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Player",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "fa9e0a37-776f-4ea2-a122-d24e9cb1151a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "37323d50-0213-4ac7-a655-33090b319837",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "team_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "nationality",
+							"value": "Indonesia",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "21",
+							"type": "text"
+						},
+						{
+							"key": "position",
+							"value": "Goalkeeper",
+							"type": "text"
+						},
+						{
+							"key": "player_name",
+							"value": "zamorano",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addPlayer",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addPlayer"
+					]
+				},
+				"description": "Endpoint ini digunakan untuk menambahkan player ke dalam database. Input dari Endpoint ini ada 6 yaitu team_id(ID dari klub tempat player bermain), nationality (Nasionalitas atau negara asal dari player), age (Usia dari player), position (Posisi player), player_name (nama player), dan api_key(API dari user)."
+			},
+			"response": []
+		},
+		{
+			"name": "Add Player yang Sudah terdaftar",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "fa9e0a37-776f-4ea2-a122-d24e9cb1151a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "37323d50-0213-4ac7-a655-33090b319837",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(402);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "team_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "nationality",
+							"value": "Indonesia",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "21",
+							"type": "text"
+						},
+						{
+							"key": "position",
+							"value": "Goalkeeper",
+							"type": "text"
+						},
+						{
+							"key": "player_name",
+							"value": "zamorano",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addPlayer",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addPlayer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Player API key Tidak Valid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "fa9e0a37-776f-4ea2-a122-d24e9cb1151a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "37323d50-0213-4ac7-a655-33090b319837",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(402);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "team_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "nationality",
+							"value": "Indonesia",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "21",
+							"type": "text"
+						},
+						{
+							"key": "position",
+							"value": "Goalkeeper",
+							"type": "text"
+						},
+						{
+							"key": "player_name",
+							"value": "zamorano",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addPlayer",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addPlayer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pecat Pemain",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "eb912ba2-57c0-4280-9559-9e5937b66011",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "99a66222-06b5-45cb-ba97-b9fd0ff725eb",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_player",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/PecatPemain",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"PecatPemain"
+					]
+				},
+				"description": "Endpoint ini berfungsi untuk memecat pemain dari sebuah tim. Input dari endpoint ini ada 2 yaitu id_player(id dari pemain yang hendak dipecat) dan api_key(API key dari user yang mengakses endpoint). Pada endpoint ini nanti nya tabel player akan diupdate team_id disesuaikan dengan keadaan player saat itu."
+			},
+			"response": []
+		},
+		{
+			"name": "Pecat Pemain yang tidak terdaftar",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f88cd288-a6f1-4f9c-a59b-83a00f766285",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "96ff928b-b4e1-4932-a7dc-4ded926fca64",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_player",
+							"value": "1000",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/PecatPemain",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"PecatPemain"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pecat Pemain API key Tidak Valid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "eb912ba2-57c0-4280-9559-9e5937b66011",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "99a66222-06b5-45cb-ba97-b9fd0ff725eb",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_player",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/PecatPemain",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"PecatPemain"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recruit Player",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b06ce802-9f00-48ee-91f8-a3771d5118e2",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ab0c1972-59b5-4a16-8e60-9c3644843dde",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "team_id",
+							"value": "111",
+							"type": "text"
+						},
+						{
+							"key": "id_player",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/RecruitPlayer",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"RecruitPlayer"
+					]
+				},
+				"description": "Pada endpoint ini akan membutuhkan 3 buah input yaitu team_id(id dari team yang hendak merekrut pemain), id_player(id dari pemain yang hendak direkrut), dan api_key(API key dari user yang mengakses endpoint). Pada endpoint ini nanti akan dilakukan update pada tabel pemain mengenai team_id dari seorang pemain."
+			},
+			"response": []
+		},
+		{
+			"name": "Recruit Player Team Tidak Terdaftar",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b06ce802-9f00-48ee-91f8-a3771d5118e2",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"team_id\":\"1\",\r",
+							"            \"id_player\":\"15\",\r",
+							"            \"post_Register_User_status\":404\r",
+							"        },\r",
+							"        {\r",
+							"            \"team_id\":\"1\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"team_id\":\"15\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"post_Register_User_status\":404\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"team_id\",current_data[\"team_id\"]);\r",
+							"pm.environment.set(\"id_player\",current_data[\"id_player\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ab0c1972-59b5-4a16-8e60-9c3644843dde",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "team_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_player",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/RecruitPlayer",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"RecruitPlayer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recruit Player Player Tidak Terdaftar",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b06ce802-9f00-48ee-91f8-a3771d5118e2",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ab0c1972-59b5-4a16-8e60-9c3644843dde",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "team_id",
+							"value": "111",
+							"type": "text"
+						},
+						{
+							"key": "id_player",
+							"value": "111",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/RecruitPlayer",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"RecruitPlayer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recruit Player API key Invalid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b06ce802-9f00-48ee-91f8-a3771d5118e2",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ab0c1972-59b5-4a16-8e60-9c3644843dde",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "team_id",
+							"value": "111",
+							"type": "text"
+						},
+						{
+							"key": "id_player",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/RecruitPlayer",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"RecruitPlayer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Team",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96aecf9a-9591-484d-a128-24283225e107",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_team",
+							"value": "555",
+							"type": "text"
+						},
+						{
+							"key": "team_name",
+							"value": "Bayern FC",
+							"type": "text"
+						},
+						{
+							"key": "team_league_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						},
+						{
+							"key": "team_logo",
+							"type": "file",
+							"src": "/C:/Users/Zamorano/Downloads/football club/football club/bayern.png"
+						}
+					],
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addTeam",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addTeam"
+					]
+				},
+				"description": "untuk menambah team baru dengan informasi detailnya"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Team API Key Invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96aecf9a-9591-484d-a128-24283225e107",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_team",
+							"value": "555",
+							"type": "text"
+						},
+						{
+							"key": "team_name",
+							"value": "Bayern FC",
+							"type": "text"
+						},
+						{
+							"key": "team_league_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						},
+						{
+							"key": "team_logo",
+							"type": "file",
+							"src": "/C:/Users/Zamorano/Downloads/football club/football club/bayern.png"
+						}
+					],
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addTeam",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addTeam"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Team Team Sudah terdaftar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96aecf9a-9591-484d-a128-24283225e107",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id_team",
+							"value": "555",
+							"type": "text"
+						},
+						{
+							"key": "team_name",
+							"value": "Bayern FC",
+							"type": "text"
+						},
+						{
+							"key": "team_league_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						},
+						{
+							"key": "team_logo",
+							"type": "file",
+							"src": "/C:/Users/Zamorano/Downloads/football club/football club/bayern.png"
+						}
+					],
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addTeam",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addTeam"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Teams",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c6329d10-4571-4d90-9e76-8fc073f62388",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/getTeamsFromDatabase?api_key={{api_key}}",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getTeamsFromDatabase"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "{{api_key}}"
+						}
+					]
+				},
+				"description": "untuk melihat data semua tim yang ada pada database"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Teams API Key Tidak Terdeteksi",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c6329d10-4571-4d90-9e76-8fc073f62388",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/getTeamsFromDatabase",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getTeamsFromDatabase"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Teams API Key Tidak Valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c6329d10-4571-4d90-9e76-8fc073f62388",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(402);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/getTeamsFromDatabase?api_key=ygU7fQhzLc5E62qXxHWDNfCeK",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getTeamsFromDatabase"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Team with certain Character",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b69f4b5-922c-4736-b4de-9285eabb7ab1",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/getTeamsContaint/i?api_key={{api_key}}",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getTeamsContaint",
+						"i"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "{{api_key}}"
+						}
+					]
+				},
+				"description": "untuk mendapatkan tim yang namanya memiliki karakter tertentu"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Team by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ee543c01-75b1-4d09-a7e4-65f3fdc5a219",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "",
+						"variables": ""
+					},
+					"options": {
+						"graphql": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/getTeamById/333?api_key={{api_key}}",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getTeamById",
+						"333"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "{{api_key}}"
+						}
+					]
+				},
+				"description": "untuk mendapat data 1 team dengan ID yang spesifik"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Team by ID API Key Tidak Terdeteksi",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ee543c01-75b1-4d09-a7e4-65f3fdc5a219",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "",
+						"variables": ""
+					},
+					"options": {
+						"graphql": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/getTeamById/333",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getTeamById",
+						"333"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Team by ID API Key Tidak Valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ee543c01-75b1-4d09-a7e4-65f3fdc5a219",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "",
+						"variables": ""
+					},
+					"options": {
+						"graphql": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/getTeamById/333?api_key=ygU7fQhzLc5E62qXxHWDNfCeK",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"getTeamById",
+						"333"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Team",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bc649c61-1319-4fad-aa51-4d7d9d521ccd",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "58cb0b9d-6b40-40c1-a141-2f22ece69911",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_team",
+							"value": "222",
+							"type": "text"
+						},
+						{
+							"key": "team_name",
+							"value": "Barcelona FC",
+							"type": "text"
+						},
+						{
+							"key": "team_league_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/updateTeam",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"updateTeam"
+					]
+				},
+				"description": "untuk mengubah data dari sebuah tim"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Team Field ada yang kosong",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bc649c61-1319-4fad-aa51-4d7d9d521ccd",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "58cb0b9d-6b40-40c1-a141-2f22ece69911",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_team",
+							"value": "222",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "team_name",
+							"value": "Barcelona FC",
+							"type": "text"
+						},
+						{
+							"key": "team_league_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/updateTeam",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"updateTeam"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Team API key Tidak Valid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bc649c61-1319-4fad-aa51-4d7d9d521ccd",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "58cb0b9d-6b40-40c1-a141-2f22ece69911",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_team",
+							"value": "222",
+							"type": "text"
+						},
+						{
+							"key": "team_name",
+							"value": "Barcelona FC",
+							"type": "text"
+						},
+						{
+							"key": "team_league_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/updateTeam",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"updateTeam"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Team yang Tidak Terdaftar",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bc649c61-1319-4fad-aa51-4d7d9d521ccd",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "58cb0b9d-6b40-40c1-a141-2f22ece69911",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_team",
+							"value": "100",
+							"type": "text"
+						},
+						{
+							"key": "team_name",
+							"value": "Barcelona FC",
+							"type": "text"
+						},
+						{
+							"key": "team_league_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/updateTeam",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"updateTeam"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Match",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4ef1e875-7643-4dd6-b002-0069c35f4a62",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "013bffac-e757-47c9-924a-3f0fb8ffe2a8",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "league_key",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "away_team",
+							"value": "222",
+							"type": "text"
+						},
+						{
+							"key": "home_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "away_score",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "home_score",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "date",
+							"value": "2020-03-10",
+							"type": "text"
+						},
+						{
+							"key": "time",
+							"value": "2020-03-10 15:00:00",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addMatch",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addMatch"
+					]
+				},
+				"description": "untuk menambah sebuah pertandingan"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Match ID team tidak valid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4ef1e875-7643-4dd6-b002-0069c35f4a62",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "013bffac-e757-47c9-924a-3f0fb8ffe2a8",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "league_key",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "away_team",
+							"value": "1000",
+							"type": "text"
+						},
+						{
+							"key": "home_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "away_score",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "home_score",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "date",
+							"value": "2020-03-10",
+							"type": "text"
+						},
+						{
+							"key": "time",
+							"value": "2020-03-10 15:00:00",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addMatch",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addMatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Match API key tidak Valid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4ef1e875-7643-4dd6-b002-0069c35f4a62",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "013bffac-e757-47c9-924a-3f0fb8ffe2a8",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "league_key",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "away_team",
+							"value": "222",
+							"type": "text"
+						},
+						{
+							"key": "home_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "away_score",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "home_score",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "date",
+							"value": "2020-03-10",
+							"type": "text"
+						},
+						{
+							"key": "time",
+							"value": "2020-03-10 15:00:00",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "{{api_key}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addMatch",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addMatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Match ID league tidak valid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4ef1e875-7643-4dd6-b002-0069c35f4a62",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "013bffac-e757-47c9-924a-3f0fb8ffe2a8",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "league_key",
+							"value": "500",
+							"type": "text"
+						},
+						{
+							"key": "away_team",
+							"value": "222",
+							"type": "text"
+						},
+						{
+							"key": "home_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "away_score",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "home_score",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "date",
+							"value": "2020-03-10",
+							"type": "text"
+						},
+						{
+							"key": "time",
+							"value": "2020-03-10 15:00:00",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addMatch",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addMatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Match Field ada yang kosong",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4ef1e875-7643-4dd6-b002-0069c35f4a62",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "013bffac-e757-47c9-924a-3f0fb8ffe2a8",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "league_key",
+							"value": "2",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "away_team",
+							"value": "222",
+							"type": "text"
+						},
+						{
+							"key": "home_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "away_score",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "home_score",
+							"value": "5",
+							"type": "text"
+						},
+						{
+							"key": "date",
+							"value": "2020-03-10",
+							"type": "text"
+						},
+						{
+							"key": "time",
+							"value": "2020-03-10 15:00:00",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addMatch",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addMatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Goal Detail",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f52db967-a6aa-4dfa-b901-f5b7754da5c8",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player_scored\",current_data[\"id_player_scored\"]);\r",
+							"pm.environment.set(\"id_player_assist\",current_data[\"id_player_assist\"]);\r",
+							"pm.environment.set(\"minute_scored\",current_data[\"minute_scored\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "82c0d78f-0ed7-49c1-acee-7177bd13933b",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "id_player_scored",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_player_assist",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "minute_scored",
+							"value": "49",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addGoalDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addGoalDetail"
+					]
+				},
+				"description": "untuk menambah detail goal dari pertandingan"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Goal Detail Ada field yang kosong",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f52db967-a6aa-4dfa-b901-f5b7754da5c8",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player_scored\",current_data[\"id_player_scored\"]);\r",
+							"pm.environment.set(\"id_player_assist\",current_data[\"id_player_assist\"]);\r",
+							"pm.environment.set(\"minute_scored\",current_data[\"minute_scored\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "82c0d78f-0ed7-49c1-acee-7177bd13933b",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "id_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "id_player_scored",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_player_assist",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "minute_scored",
+							"value": "49",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addGoalDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addGoalDetail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Goal Detail API Key Tidak valid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f52db967-a6aa-4dfa-b901-f5b7754da5c8",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player_scored\",current_data[\"id_player_scored\"]);\r",
+							"pm.environment.set(\"id_player_assist\",current_data[\"id_player_assist\"]);\r",
+							"pm.environment.set(\"minute_scored\",current_data[\"minute_scored\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "82c0d78f-0ed7-49c1-acee-7177bd13933b",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "id_player_scored",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_player_assist",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "minute_scored",
+							"value": "49",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addGoalDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addGoalDetail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Goal Detail Match Not Found",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f52db967-a6aa-4dfa-b901-f5b7754da5c8",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player_scored\",current_data[\"id_player_scored\"]);\r",
+							"pm.environment.set(\"id_player_assist\",current_data[\"id_player_assist\"]);\r",
+							"pm.environment.set(\"minute_scored\",current_data[\"minute_scored\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "82c0d78f-0ed7-49c1-acee-7177bd13933b",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "100",
+							"type": "text"
+						},
+						{
+							"key": "id_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "id_player_scored",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_player_assist",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "minute_scored",
+							"value": "49",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addGoalDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addGoalDetail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Card Detail",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "db2a17d7-2c76-4038-b14d-6854e54dd88b",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"1\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player\",current_data[\"id_player\"]);\r",
+							"pm.environment.set(\"card_type\",current_data[\"card_type\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4fbe5177-6e5c-41bc-8d5e-92b4b49bc1ab",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "id_player",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "card_type",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addCardDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addCardDetail"
+					]
+				},
+				"description": "untuk menambahkan detail kartu yang diterima player saat pertandingan"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete League League_Key undefined",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "081e6338-da57-44af-8aee-a3235d6da5bf",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1c28a322-5763-45af-ae1c-40a9d0923363",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/deleteLeague",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"deleteLeague"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Goal Detail Team Not Found",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f52db967-a6aa-4dfa-b901-f5b7754da5c8",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player_scored\",current_data[\"id_player_scored\"]);\r",
+							"pm.environment.set(\"id_player_assist\",current_data[\"id_player_assist\"]);\r",
+							"pm.environment.set(\"minute_scored\",current_data[\"minute_scored\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "82c0d78f-0ed7-49c1-acee-7177bd13933b",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_team",
+							"value": "10000",
+							"type": "text"
+						},
+						{
+							"key": "id_player_scored",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_player_assist",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "minute_scored",
+							"value": "49",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addGoalDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addGoalDetail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Goal Detail Player Not Found",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f52db967-a6aa-4dfa-b901-f5b7754da5c8",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player_scored\":\"1\",\r",
+							"            \"id_player_assist\":\"2\",\r",
+							"            \"minute_scored\":\"49\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player_scored\",current_data[\"id_player_scored\"]);\r",
+							"pm.environment.set(\"id_player_assist\",current_data[\"id_player_assist\"]);\r",
+							"pm.environment.set(\"minute_scored\",current_data[\"minute_scored\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "82c0d78f-0ed7-49c1-acee-7177bd13933b",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "id_player_scored",
+							"value": "5000",
+							"type": "text"
+						},
+						{
+							"key": "id_player_assist",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "minute_scored",
+							"value": "49",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addGoalDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addGoalDetail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Card Detail Field ada yang kosong",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "db2a17d7-2c76-4038-b14d-6854e54dd88b",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"1\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player\",current_data[\"id_player\"]);\r",
+							"pm.environment.set(\"card_type\",current_data[\"card_type\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4fbe5177-6e5c-41bc-8d5e-92b4b49bc1ab",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "id_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "id_player",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "card_type",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addCardDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addCardDetail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Card Detail API key tidak valid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "db2a17d7-2c76-4038-b14d-6854e54dd88b",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"1\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player\",current_data[\"id_player\"]);\r",
+							"pm.environment.set(\"card_type\",current_data[\"card_type\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4fbe5177-6e5c-41bc-8d5e-92b4b49bc1ab",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "id_player",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "card_type",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCeK",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addCardDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addCardDetail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Card Detail Match not found",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "db2a17d7-2c76-4038-b14d-6854e54dd88b",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"1\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player\",current_data[\"id_player\"]);\r",
+							"pm.environment.set(\"card_type\",current_data[\"card_type\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4fbe5177-6e5c-41bc-8d5e-92b4b49bc1ab",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "100",
+							"type": "text"
+						},
+						{
+							"key": "id_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "id_player",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "card_type",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addCardDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addCardDetail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Card Detail Team not found",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "db2a17d7-2c76-4038-b14d-6854e54dd88b",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"1\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player\",current_data[\"id_player\"]);\r",
+							"pm.environment.set(\"card_type\",current_data[\"card_type\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4fbe5177-6e5c-41bc-8d5e-92b4b49bc1ab",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_team",
+							"value": "33345",
+							"type": "text"
+						},
+						{
+							"key": "id_player",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "card_type",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addCardDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addCardDetail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Card Detail Player not found",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "db2a17d7-2c76-4038-b14d-6854e54dd88b",
+						"exec": [
+							"var queue = pm.environment.get(\"queue_register\");\r",
+							"\r",
+							"if(!queue || queue.length<= 0){\r",
+							"    queue=[\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"1\",\r",
+							"            \"post_Register_User_status\":201\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"5\",\r",
+							"            \"id_team\":\"333\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        },\r",
+							"        {\r",
+							"            \"id_match\":\"1\",\r",
+							"            \"id_team\":\"777\",\r",
+							"            \"id_player\":\"1\",\r",
+							"            \"card_type\":\"2\",\r",
+							"            \"post_Register_User_status\":400\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"var current_data = queue.shift();\r",
+							"pm.environment.set(\"id_match\",current_data[\"id_match\"]);\r",
+							"pm.environment.set(\"id_team\",current_data[\"id_team\"]);\r",
+							"pm.environment.set(\"id_player\",current_data[\"id_player\"]);\r",
+							"pm.environment.set(\"card_type\",current_data[\"card_type\"]);\r",
+							"pm.environment.set(\"post_Register_User_status\",current_data[\"post_Register_User_status\"]);\r",
+							"pm.environment.set(\"queue_register\",queue);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4fbe5177-6e5c-41bc-8d5e-92b4b49bc1ab",
+						"exec": [
+							"pm.test(\"Status code\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id_match",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id_team",
+							"value": "333",
+							"type": "text"
+						},
+						{
+							"key": "id_player",
+							"value": "100",
+							"type": "text"
+						},
+						{
+							"key": "card_type",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "api_key",
+							"value": "ygU7fQhzLc5E62qXxHWDNfCei",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/addCardDetail",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"addCardDetail"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "bc51d160-48dd-444b-9919-3ed50e9271d6",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "959b2678-95a1-46e4-8764-fb153fb237d4",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

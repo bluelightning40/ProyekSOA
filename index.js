@@ -13,6 +13,7 @@ var multer = require('multer');
 const app = express();
 const mysql = require('mysql');
 var request = require('request');
+var path = require('path');
 const randomstring = require('randomstring');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
@@ -60,13 +61,13 @@ app.post('/api/createLeague',(req,res)=>{
     }else{
         pool.getConnection((err,conn)=>{
             conn.query(`select * from user where api_key='${api_key}' and api_hit>0 and status=2`,(err,result)=>{
-                var api_hit = result[0].api_hit;
                 console.log("a")
                 if(err) res.status(500).send(err);
                 else{
                     if(result.length==0){
                         return res.status(400).send("Upgrade Layanan User Anda Menjadi Premium");
                     }
+                    var api_hit = result[0].api_hit;
                     conn.query(`select * from leagues where league_name='${league_name}'`, async (err,result)=>{
                       console.log("b");
                         if(err) res.status(500).send(err);
@@ -145,34 +146,36 @@ app.get('/api/getLeaguesByCountry',(req,res)=>{
     if(name==undefined){
         res.status(400).send("Harus ada parameter name");
     }
-    pool.getConnection((error,conn)=>{
-        conn.query(`select * from user where api_key='${api_key}' and api_hit>0`,(err,result)=>{
-            var api_hit = result[0].api_hit;
-            if(err) res.status(500).send(err);
-            else{
-                if(result.length==0){
-                    res.status(404).send("User belum terdaftar atau api_hit anda habis");
-                }else{
-                    conn.query(`select * from leagues where country_name='${name}'`,(error,result)=>{
-                        api_hit = api_hit - 1;
-                        if(error) res.status(500).send(error);
-                        else{
-                            if(result.length==0){
-                                res.status(404).send("Status : 404 Bad Request");
-                            }else{
-                                conn.query(`update user set api_hit=${api_hit} where api_key='${api_key}'`,(errs,rows)=>{
-                                    if(errs) res.status(500).send(errs);
-                                    else{
-                                        res.status(200).send(result);
-                                    }
-                                })
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    })
+    else{
+      pool.getConnection((error,conn)=>{
+          conn.query(`select * from user where api_key='${api_key}' and api_hit>0`,(err,result)=>{
+              if(err) res.status(500).send(err);
+              else{
+                  if(result.length==0){
+                      res.status(404).send("User belum terdaftar atau api_hit anda habis");
+                  }else{
+                        var api_hit = result[0].api_hit;
+                      conn.query(`select * from leagues where country_name='${name}'`,(error,result)=>{
+                          api_hit = api_hit - 1;
+                          if(error) res.status(500).send(error);
+                          else{
+                              if(result.length==0){
+                                  res.status(404).send("Status : 404 Bad Request");
+                              }else{
+                                  conn.query(`update user set api_hit=${api_hit} where api_key='${api_key}'`,(errs,rows)=>{
+                                      if(errs) res.status(500).send(errs);
+                                      else{
+                                          res.status(200).send(result);
+                                      }
+                                  })
+                              }
+                          }
+                      });
+                  }
+              }
+          });
+      })
+    }
 });
 
 app.put('/api/updateLeague',(req,res)=>{
@@ -193,28 +196,33 @@ app.put('/api/updateLeague',(req,res)=>{
                     res.status(404).send("User belum terdaftar atau api_hit anda habis");
                 }else{
                     var api_hit = result[0].api_hit;
-                    conn.query(`update leagues set league_name='${name}', country_name='${country}' where id_league='${key}'`,(error,result)=>{
-                        api_hit = api_hit - 1;
-                        if(error) res.status(500).send(error);
-                        else{
-                            if(result.length==0){
-                                res.status(404).send("Status : 404 Bad Request");
-                            }
-                            else{
-                                conn.query(`update user set api_hit=${api_hit} where api_key='${api_key}'`,(errs,rows)=>{
-                                    if(errs) res.status(500).send(errs);
-                                    else{
-                                        res.status(201).json({
-                                            key : key,
-                                            league_name : name,
-                                            country_name : country
-                                        })
-                                    }
-                                })
+                    conn.query(`select * from leagues where id_league='${key}'`,(err,result)=>{
+                      if(err) res.status(500).send(err);
+                      else{
+                        if(result.length>0){
+                          conn.query(`update leagues set league_name='${name}', country_name='${country}' where id_league='${key}'`,(error,result)=>{
+                              api_hit = api_hit - 1;
+                              if(error) res.status(500).send(error);
+                              else{
+                                      conn.query(`update user set api_hit=${api_hit} where api_key='${api_key}'`,(errs,rows)=>{
+                                          if(errs) res.status(500).send(errs);
+                                          else{
+                                              res.status(201).json({
+                                                  key : key,
+                                                  league_name : name,
+                                                  country_name : country
+                                              })
+                                          }
+                                      })
 
-                            }
+                              }
+                          });
                         }
-                    });
+                        else{
+                          res.status(404).send("Status : 404 Bad Request");
+                        }
+                      }
+                    })
                 }
             }
         })
@@ -229,28 +237,36 @@ app.delete('/api/deleteLeague',(req,res)=>{
     }else{
         pool.getConnection((error,conn)=>{
             conn.query(`select * from user where api_key='${api_key}' and api_hit>0`,(err,result)=>{
-                var api_hit = result[0].api_hit;
                 if(err) res.status(500).send(err);
                 else{
                     if(result.length==0){
                         res.status(404).send("User belum terdaftar atau api_hit anda habis");
                     }else{
-                        conn.query(`delete from leagues where id_league='${key}'`,(error,result)=>{
-                            api_hit = api_hit - 1;
-                            if(error) res.status(500).send(error);
-                            else{
-                                if(result.length==0){
-                                    res.status(404).send("Status : 404 Bad Request");
-                                }else{
-                                    conn.query(`update user set api_hit=${api_hit} where api_key='${api_key}'`,(errs,rows)=>{
-                                        if(errs) res.status(500).send(errs);
-                                        else{
-                                            res.status(200).send("Berhasil Delete Leagues");
-                                        }
-                                    })
-                                }
+                        var api_hit = result[0].api_hit;
+                        conn.query(`select * from leagues where id_league='${key}'`,(err,result)=>{
+                          if(err) res.status(500).send(err);
+                          else{
+                            if(result.length>0){
+
+                              conn.query(`delete from leagues where id_league='${key}'`,(error,result)=>{
+                                  api_hit = api_hit - 1;
+                                  if(error) res.status(500).send(error);
+                                  else{
+                                          conn.query(`update user set api_hit=${api_hit} where api_key='${api_key}'`,(errs,rows)=>{
+                                              if(errs) res.status(500).send(errs);
+                                              else{
+                                                  res.status(200).send("Berhasil Delete Leagues");
+                                              }
+                                          })
+
+                                  }
+                              });
                             }
-                        });
+                            else{
+                              res.status(404).send("Bad Request");
+                            }
+                          }
+                        })
                     }
                 }
             })
@@ -332,13 +348,13 @@ app.post('/api/addTeam',upload.single('team_logo'), async function(req,res){
     }else{
         pool.getConnection((err,conn)=>{
             conn.query(`select * from user where api_key='${api_key}' and api_hit>0 and status=2`,(err,result)=>{
-                var api_hit = result[0].api_hit;
                 if(err) res.status(500).send(err);
                 else{
                     if(result.length==0){
                         return res.status(400).send("upgrade ke premium user untuk akses fitur ini");
                     }
-                    conn.query(`select * from teams where id_team='${id_team}'`, async (err,result)=>{
+                    var api_hit = result[0].api_hit;
+                    conn.query(`select * from teams where team_name='${team_name}'`, async (err,result)=>{
                         if(err) res.status(500).send(err);
                         else{
                             const teams = await getTeams(id_team);
@@ -350,7 +366,7 @@ app.post('/api/addTeam',upload.single('team_logo'), async function(req,res){
                             //     }
                             // }
                             if(result.length > 0){
-                                return res.status(404).send('ID_TEAM sudah terpakai!');
+                                return res.status(404).send('Team sudah terdaftar!');
                             }else{
                                 conn.query(`insert into teams (team_name,team_league_id,team_logo) values('${team_name}','${team_league_id}','${team_logo}')`,(errors,row)=>{
                                     if(errors) res.status(500).send(errors);
@@ -380,12 +396,22 @@ app.get("/api/getTeamsFromDatabase",function(req,res){
         res.status(400).send('inputkan api_key untuk menggunakan fitur ini');
     }else{
         pool.getConnection((err,conn)=>{
-            conn.query(`select * from teams`, (err,result)=>{
-                if(err) res.status(500).send(err);
-                else{
-                    res.status(201).send(result);
-                }
-            });
+          conn.query(`select * from user where api_key = '${api_key}'`,(err,result)=>{
+            if(err) res.status(500).send(err);
+            else{
+              if(result.length>0){
+                conn.query(`select * from teams`, (err,result)=>{
+                    if(err) res.status(500).send(err);
+                    else{
+                        res.status(201).send(result);
+                    }
+                });
+              }
+              else{
+                res.status(402).send("API key Tidak Valid");
+              }
+            }
+          })
         });
     }
 });
@@ -398,12 +424,22 @@ app.get("/api/getTeamById/:team_id",function(req,res){
         res.status(400).send('inputkan api_key untuk menggunakan fitur ini');
     }else{
         pool.getConnection((err,conn)=>{
-            conn.query(`select * from teams where id_team='${team_id}'`, (err,result)=>{
-                if(err) res.status(500).send(err);
-                else{
-                    res.status(201).send(result);
-                }
-            });
+          conn.query(`select * from user where api_key='${api_key}'`,(err,result)=>{
+            if(err) res.status(500).send(err);
+            else{
+              if(result.length>0){
+                conn.query(`select * from teams where id_team='${team_id}'`, (err,result)=>{
+                    if(err) res.status(500).send(err);
+                    else{
+                        res.status(201).send(result);
+                    }
+                });
+              }
+              else{
+                res.status(404).send("API Key Tidak Valid");
+              }
+            }
+          })
         });
     }
 });
@@ -435,44 +471,57 @@ app.put('/api/updateTeam',(req,res)=>{
     if(!id_team || !team_name || !api_key || !team_league_id){
         res.status(400).send("semua field harus diisi!");
     }
-    pool.getConnection((error,conn)=>{
-        conn.query(`select * from user where api_key='${api_key}' and api_hit>0`,(err,result)=>{
-            var api_hit = result[0].api_hit;
-            if(err) res.status(500).send(err);
-            else{
-                if(result.length==0){
-                    res.status(404).send("User belum terdaftar atau api_hit anda habis");
-                }else{
-                    conn.query(`update teams set team_name='${team_name}', team_league_id='${team_league_id}' where id_team='${id_team}'`,(error,result)=>{
-                        api_hit = api_hit - 1;
-                        if(error) res.status(500).send(error);
+    else{
+      pool.getConnection((error,conn)=>{
+          conn.query(`select * from user where api_key='${api_key}' and api_hit>0`,(err,result)=>{
+              if(err) res.status(500).send(err);
+              else{
+                  if(result.length==0){
+                      res.status(404).send("User belum terdaftar atau api_hit anda habis");
+                  }else{
+                      var api_hit = result[0].api_hit;
+                      conn.query(`select * from teams where id_team='${id_team}'`,(err,result)=>{
+                        if(err) res.status(500).send(err);
                         else{
-                            if(result.length==0){
-                                res.status(404).send("Status : 404 Bad Request.\nTeam NOT FOUND");
-                            }
-                            else{
-                                conn.query(`update user set api_hit=${api_hit} where api_key='${api_key}'`,(errs,rows)=>{
-                                    if(errs) res.status(500).send(errs);
+                          if(result.length>0){
+                            conn.query(`update teams set team_name='${team_name}', team_league_id='${team_league_id}' where id_team='${id_team}'`,(error,result)=>{
+
+                                if(error) res.status(500).send(error);
+                                else{
+                                    if(result.length==0){
+                                    }
                                     else{
-                                        res.status(201).json({
-                                            id_team : id_team,
-                                            team_name : team_name,
-                                            team_league_id : team_league_id
+                                      api_hit = api_hit - 1;
+                                        conn.query(`update user set api_hit=${api_hit} where api_key='${api_key}'`,(errs,rows)=>{
+                                            if(errs) res.status(500).send(errs);
+                                            else{
+                                                res.status(201).json({
+                                                    id_team : id_team,
+                                                    team_name : team_name,
+                                                    team_league_id : team_league_id
+                                                });
+                                            }
                                         });
                                     }
-                                });
-                            }
+                                }
+                            });
+                          }
+                          else{
+                              res.status(404).send("Status : 404 Bad Request.\nTeam NOT FOUND");
+                          }
                         }
-                    });
-                }
-            }
-        });
-    });
+                      })
+
+                  }
+              }
+          });
+      });
+    }
 });
 
 //cost 1 api_hit
 app.post('/api/addMatch',(req,res)=>{
-    var id_match = req.body.id_match;
+    //var id_match = req.body.id_match;
     var league_key = req.body.league_key;
     var away_team = req.body.away_team;
     var home_team = req.body.home_team;
@@ -482,17 +531,18 @@ app.post('/api/addMatch',(req,res)=>{
     var time = req.body.time;
     var api_key = req.body.api_key;
 
-    if(!api_key || !id_match || !league_key || !away_team || !home_team || !away_score || !home_score || !date || !time){
+    if(!api_key || !league_key || !away_team || !home_team || !away_score || !home_score || !date || !time){
         res.status(400).send('Semua field harus di isi');
     }else{
         pool.getConnection((err,conn)=>{
             conn.query(`select * from user where api_key='${api_key}' and api_hit>0 and status=2`,(err,result)=>{
-                var api_hit = result[0].api_hit;
+
                 if(err) res.status(500).send(err);
                 else{
                     if(result.length==0){
                         return res.status(400).send("upgrade ke premium user untuk akses fitur ini");
                     }
+                    var api_hit = result[0].api_hit;
                     conn.query(`select * from leagues where id_league='${league_key}'`, async (err,resultleague)=>{
                         if(err) res.status(500).send(err);
                         else{
@@ -541,12 +591,13 @@ app.post('/api/addGoalDetail',(req,res)=>{
     }else{
         pool.getConnection((err,conn)=>{
             conn.query(`select * from user where api_key='${api_key}' and api_hit>0 and status=2`,(err,result)=>{
-                var api_hit = result[0].api_hit;
+
                 if(err) res.status(500).send(err);
                 else{
                     if(result.length==0){
                         return res.status(400).send("upgrade ke premium user untuk akses fitur ini");
                     }
+                    var api_hit = result[0].api_hit;
                     conn.query(`select * from matches where id_match='${id_match}'`, async (err,resultmatch)=>{
                         if(err) res.status(500).send(err);
                         else{
@@ -602,12 +653,13 @@ app.post('/api/addCardDetail',(req,res)=>{
     }else{
         pool.getConnection((err,conn)=>{
             conn.query(`select * from user where api_key='${api_key}' and api_hit>0 and status=2`,(err,result)=>{
-                var api_hit = result[0].api_hit;
+
                 if(err) res.status(500).send(err);
                 else{
                     if(result.length==0){
                         return res.status(400).send("upgrade ke premium user untuk akses fitur ini");
                     }
+                    var api_hit = result[0].api_hit;
                     conn.query(`select * from matches where id_match='${id_match}'`, async (err,resultmatch)=>{
                         if(err) res.status(500).send(err);
                         else{
@@ -756,11 +808,11 @@ app.post("/api/PecatPemain",function(req,res){
       if(err) res.status(500).send(err);
       else{
         if(result.length>0){
+            api_hit = result[0].api_hit;
           conn.query(`select * from player where id_player='${id_player}'`,(err, result)=>{
             if(err) res.status(500).send(err);
             else{
               if(result.length>0){
-                api_hit = result[0].api_hit;
                 conn.query(`update player set id_team=0 where id_player='${id_player}'`,(err,result)=>{
                   if(err) res.status(500).send(err);
                   else{
@@ -799,7 +851,7 @@ app.post("/api/RegisterUser", function(req,res){
   api_key = randomstring.generate(25);
   if(id_user != undefined && password != undefined){
     pool.getConnection((err,conn)=>{
-      conn.query(`select * from user where id_user = '${id_user}' or email_user='${email}'`, (err,result)=>{
+      conn.query(`select * from user where id_user = '${id_user}' AND email_user='${email}'`, (err,result)=>{
         if(err) res.status(500).send(err)
         else{
           if(result.length==0){
@@ -831,7 +883,7 @@ app.post("/api/loginUser", function(req,res){
             res.status(201).send(result[0]);
           }
           else{
-            res.status(400).send("User belum terdaftar!!")
+            res.status(400).send("User atau Password tidak valid!!")
           }
         }
       })
