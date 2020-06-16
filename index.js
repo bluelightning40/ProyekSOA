@@ -102,6 +102,7 @@ app.post('/api/createLeague',(req,res)=>{
                     });
                 }
             });
+            conn.release();
         });
     }
 });
@@ -137,6 +138,7 @@ app.get('/api/getLeagues',(req,res)=>{
         });
         }
       })
+      conn.release();
     });
 });
 
@@ -174,6 +176,7 @@ app.get('/api/getLeaguesByCountry',(req,res)=>{
                   }
               }
           });
+          conn.release();
       })
     }
 });
@@ -226,6 +229,7 @@ app.put('/api/updateLeague',(req,res)=>{
                 }
             }
         })
+        conn.release();
     });
 });
 
@@ -269,6 +273,7 @@ app.delete('/api/deleteLeague',(req,res)=>{
                     }
                 }
             })
+            conn.release();
         });
     }
 });
@@ -383,6 +388,7 @@ app.post('/api/addTeam',upload.single('team_logo'), async function(req,res){
                     });
                 }
             });
+            conn.release();
         });
     }
 });
@@ -410,6 +416,7 @@ app.get("/api/getTeamsFromDatabase",function(req,res){
               }
             }
           })
+          conn.release();
         });
     }
 });
@@ -438,6 +445,7 @@ app.get("/api/getTeamById/:team_id",function(req,res){
               }
             }
           })
+          conn.release();
         });
     }
 });
@@ -456,6 +464,7 @@ app.get("/api/getTeamsContaint/:chars",function(req,res){
                     res.status(201).send(result);
                 }
             });
+            conn.release();
         });
     }
 });
@@ -513,6 +522,7 @@ app.put('/api/updateTeam',(req,res)=>{
                   }
               }
           });
+          conn.release();
       });
     }
 });
@@ -571,6 +581,7 @@ app.post('/api/addMatch',(req,res)=>{
                     });
                 }
             });
+            conn.release();
         });
     }
 });
@@ -634,6 +645,7 @@ app.post('/api/addGoalDetail',(req,res)=>{
                     });
                 }
             });
+            conn.release();
         });
     }
 });
@@ -696,6 +708,7 @@ app.post('/api/addCardDetail',(req,res)=>{
                     });
                 }
             });
+            conn.release();
         });
     }
 });
@@ -743,6 +756,7 @@ app.post("/api/addPlayer",function(req,res){
         }
       }
     })
+    conn.release();
   })
 });
 
@@ -794,7 +808,7 @@ app.get("/api/RecruitPlayer",function(req,res){
         ]
       }
     })
-
+    conn.release();
   })
 });
 
@@ -835,6 +849,7 @@ app.post("/api/PecatPemain",function(req,res){
         }
       }
     })
+    conn.release();
   })
 });
 
@@ -865,6 +880,7 @@ app.post("/api/RegisterUser", function(req,res){
           }
         }
       })
+      conn.release();
     })
   }
 });
@@ -885,6 +901,7 @@ app.post("/api/loginUser", function(req,res){
           }
         }
       })
+      conn.release();
     })
   }
 });
@@ -953,6 +970,7 @@ app.post("/api/UpgradeUser/:upgrade_to", function(req,res){
         }
       }
     });
+    conn.release();
   });
 });
 
@@ -965,7 +983,6 @@ setInterval(function(){
       else{
         if(res.length==0){
           conn.query(`update user set last_update='${formatted}', api_hit = (status+1)*25 where 1`,(err,res)=>{
-            conn.release();
             if(err) console.log(err);
             else{
               console.log("user api hit updated");
@@ -974,6 +991,7 @@ setInterval(function(){
         }
       }
     })
+    conn.release();
   });
 },5000);
 
