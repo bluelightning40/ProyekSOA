@@ -91,10 +91,11 @@ app.post('/api/createLeague',(req,res)=>{
                                             if(errs) res.status(500).send(errs);
                                             else{
                                                 return res.status(201).send('Berhasil menambah league');
+                                                
                                             }
                                         });
                                     }
-                                });
+                                })
 
 
                             }
