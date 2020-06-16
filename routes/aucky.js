@@ -102,7 +102,7 @@ router.post('/api/addTeam',upload.single('team_logo'), async function(req,res){
                             const teams = await getTeams(id_team);
                             const hasil = JSON.parse(teams);
                             // for(var i = 0; i<hasil.result.length; i++){
-                            //     if(hasil.result[i].league_name == league_name){
+                            //     if(hasil.result[i].team_name == team_name){
                             //         return res.status(400).send('Status : 400 Bad Request');
                             //     }
                             // }
@@ -167,14 +167,18 @@ router.get("/api/getTeamById/:team_id",function(req,res){
         res.status(400).send('inputkan api_key untuk menggunakan fitur ini');
     }else{
         pool.getConnection((err,conn)=>{
-          conn.query(`select * from user where api_key='${api_key}'`,(err,result)=>{
+            conn.query(`select * from user where api_key='${api_key}'`,(err,result)=>{
             if(err) res.status(500).send(err);
             else{
-              if(result.length>0){
-                conn.query(`select * from teams where id_team='${team_id}'`, (err,result)=>{
+                if(result.length>0){
+                conn.query(`select * from teams where id_team='${team_id}'`, (err,resultteam)=>{
                     if(err) res.status(500).send(err);
                     else{
-                        res.status(201).send(result);
+                        if (resultteam.length>0) {
+                            res.status(201).send(resultteam);
+                        } else {
+                            res.status(404).send("ID Team NOT FOUND");
+                        }
                     }
                 });
               }
@@ -196,10 +200,24 @@ router.get("/api/getTeamsContaint/:chars",function(req,res){
         res.status(400).send('inputkan api_key untuk menggunakan fitur ini');
     }else{
         pool.getConnection((err,conn)=>{
-            conn.query(`select * from teams where team_name LIKE '%${chars}%'`, (err,result)=>{
+            conn.query(`select * from user where api_key='${api_key}'`,(err,result)=>{
                 if(err) res.status(500).send(err);
                 else{
-                    res.status(201).send(result);
+                    if(result.length>0){
+                        conn.query(`select * from teams where team_name LIKE '%${chars}%'`, (err,resultteam)=>{
+                            if(err) res.status(500).send(err);
+                            else{
+                                if (resultteam.length>0) {
+                                    res.status(201).send(resultteam);
+                                } else {
+                                    res.status(404).send("Team with certain character NOT FOUND");
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        res.status(404).send("API Key Tidak Valid");
+                    }
                 }
             });
             conn.release();
@@ -230,7 +248,6 @@ router.put('/api/updateTeam',(req,res)=>{
                         else{
                           if(result.length>0){
                             conn.query(`update teams set team_name='${team_name}', team_league_id='${team_league_id}' where id_team='${id_team}'`,(error,result)=>{
-
                                 if(error) res.status(500).send(error);
                                 else{
                                     if(result.length==0){
@@ -256,7 +273,6 @@ router.put('/api/updateTeam',(req,res)=>{
                           }
                         }
                       })
-
                   }
               }
           });
@@ -349,19 +365,19 @@ router.post('/api/addGoalDetail',(req,res)=>{
                         if(err) res.status(500).send(err);
                         else{
                             if(resultmatch.length==0){
-                                return res.status(400).send("MATCH NOT FOUND!");
+                                return res.status(404).send("MATCH NOT FOUND!");
                             }
                             conn.query(`select * from teams where id_team='${id_team}'`, async (err,resultteam)=>{
                                 if(err) res.status(500).send(err);
                                 else{
                                     if(resultteam.length==0){
-                                        return res.status(400).send("TEAM NOT FOUND!");
+                                        return res.status(404).send("TEAM NOT FOUND!");
                                     }
                                     conn.query(`select * from player where id_player='${id_player_scored}'`, async (err,resplayer)=>{
                                         if(err) res.status(500).send(err);
                                         else{
                                             if(resplayer.length==0){
-                                                return res.status(400).send("PLAYER NOT FOUND!");
+                                                return res.status(404).send("PLAYER NOT FOUND!");
                                             }
                                             conn.query(`insert into goal_detail values('${id_match}','${id_team}','${id_player_scored}','${id_player_assist}','${minute_scored}')`,(errors,row)=>{
                                                 if(errors) res.status(500).send(errors);
@@ -412,19 +428,19 @@ router.post('/api/addCardDetail',(req,res)=>{
                         if(err) res.status(500).send(err);
                         else{
                             if(resultmatch.length==0){
-                                return res.status(400).send("MATCH NOT FOUND!");
+                                return res.status(404).send("MATCH NOT FOUND!");
                             }
                             conn.query(`select * from teams where id_team='${id_team}'`, async (err,resultteam)=>{
                                 if(err) res.status(500).send(err);
                                 else{
                                     if(resultteam.length==0){
-                                        return res.status(400).send("TEAM NOT FOUND!");
+                                        return res.status(404).send("TEAM NOT FOUND!");
                                     }
                                     conn.query(`select * from player where id_player='${id_player}'`, async (err,resplayer)=>{
                                         if(err) res.status(500).send(err);
                                         else{
                                             if(resplayer.length==0){
-                                                return res.status(400).send("PLAYER NOT FOUND!");
+                                                return res.status(404).send("PLAYER NOT FOUND!");
                                             }
                                             conn.query(`insert into card_detail values('${id_match}','${id_team}','${id_player}','${card_type}')`,(errors,row)=>{
                                                 if(errors) res.status(500).send(errors);
