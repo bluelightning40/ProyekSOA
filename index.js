@@ -965,6 +965,7 @@ setInterval(function(){
       else{
         if(res.length==0){
           conn.query(`update user set last_update='${formatted}', api_hit = (status+1)*25 where 1`,(err,res)=>{
+            conn.release();
             if(err) console.log(err);
             else{
               console.log("user api hit updated");
