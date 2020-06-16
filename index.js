@@ -63,8 +63,6 @@ app.use("/",dicky);
 app.use("/",zamorano);
 app.use("/",aucky);
 
-
-
 setInterval(function(){
   var dt = dateTime.create();
   var formatted = dt.format('Y-m-d');
@@ -84,7 +82,7 @@ setInterval(function(){
     })
     conn.release();
   });
-},5000);
+},1000);
 
 //=======================================================================================================================
 
